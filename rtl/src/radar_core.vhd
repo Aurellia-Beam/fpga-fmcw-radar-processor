@@ -5,7 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity radar_core is
     Port (
         aclk            : in  STD_LOGIC;
-        aresetn         : in  STD_LOGIC; -- Used for Window, NOT for FFT
+        aresetn         : in  STD_LOGIC; -- Used for Window logic only
         
         s_axis_tdata    : in  STD_LOGIC_VECTOR(31 downto 0);
         s_axis_tvalid   : in  STD_LOGIC;
@@ -36,7 +36,8 @@ architecture Behavioral of radar_core is
         );
     end component;
 
-    -- COMPONENT: FFT (Matches your VHO exactly)
+    -- COMPONENT: FFT
+    -- This now EXACTLY matches your VHO file.
     COMPONENT xfft_0
       PORT (
         aclk : IN STD_LOGIC;
@@ -54,7 +55,7 @@ architecture Behavioral of radar_core is
         
         -- Data Out
         m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- ADDED (From your VHO)
+        m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- The Missing Link!
         m_axis_data_tvalid : OUT STD_LOGIC;
         m_axis_data_tready : IN STD_LOGIC;
         m_axis_data_tlast : OUT STD_LOGIC;
@@ -82,6 +83,8 @@ architecture Behavioral of radar_core is
     -- Config Signals
     signal cfg_tvalid : STD_LOGIC := '0';
     signal cfg_tready : STD_LOGIC;
+    
+    -- State machine to fire Config ONCE
     type state_type is (IDLE, SEND_CONFIG, DONE);
     signal state : state_type := IDLE;
 
@@ -102,6 +105,7 @@ begin
     );
 
     -- PROCESS: Single-Shot Configuration
+    -- Waits 50 cycles, Sends "Forward FFT" command once, then stops.
     process(aclk)
         variable startup_count : integer := 0;
     begin
@@ -136,7 +140,7 @@ begin
         aclk => aclk,
         
         -- Config
-        s_axis_config_tdata => x"01",
+        s_axis_config_tdata => x"01", -- Forward FFT
         s_axis_config_tvalid => cfg_tvalid,
         s_axis_config_tready => cfg_tready,
         
@@ -148,7 +152,7 @@ begin
         
         -- Data Out
         m_axis_data_tdata => m_axis_tdata,
-        m_axis_data_tuser => open, -- We ignore the exponent for now
+        m_axis_data_tuser => open, -- Connected but ignored
         m_axis_data_tvalid => m_axis_tvalid,
         m_axis_data_tready => m_axis_tready,
         m_axis_data_tlast => m_axis_tlast,

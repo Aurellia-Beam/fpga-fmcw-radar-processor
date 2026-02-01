@@ -29,8 +29,6 @@ architecture Behavioral of window_multiplier is
     -- Signals
     signal input_i      : signed(15 downto 0);
     signal input_q      : signed(15 downto 0);
-    signal mult_i       : signed(31 downto 0);
-    signal mult_q       : signed(31 downto 0);
     
     -- Hamming Window Coefficient (Approx 0.5 for test) -> Fixed Point Q1.15
     constant WINDOW_COEFF : signed(15 downto 0) := to_signed(16384, 16);
@@ -45,6 +43,9 @@ begin
     s_axis_tready <= m_axis_tready;
 
     process(aclk)
+        -- FIX: Use VARIABLES for intermediate multiplication
+        variable mult_i : signed(31 downto 0);
+        variable mult_q : signed(31 downto 0);
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
@@ -53,11 +54,12 @@ begin
                 m_axis_tlast  <= '0';
             else
                 if (s_axis_tvalid = '1' and m_axis_tready = '1') then
-                    -- Multiplication
-                    mult_i <= input_i * WINDOW_COEFF;
-                    mult_q <= input_q * WINDOW_COEFF;
+                    -- Multiplication using VARIABLES (immediate assignment)
+                    mult_i := input_i * WINDOW_COEFF;
+                    mult_q := input_q * WINDOW_COEFF;
 
                     -- Bit Slicing / Truncation (Shift right 15)
+                    -- Now mult_i/mult_q have the CURRENT value
                     m_axis_tdata(15 downto 0)  <= std_logic_vector(mult_i(30 downto 15));
                     m_axis_tdata(31 downto 16) <= std_logic_vector(mult_q(30 downto 15));
 
@@ -65,6 +67,7 @@ begin
                     m_axis_tvalid <= '1';
                 
                 elsif (m_axis_tready = '1') then
+                    -- Only clear valid when downstream consumes the data
                     m_axis_tvalid <= '0';
                 end if;
             end if;

@@ -1,0 +1,8 @@
+Time resolution is 1 ps
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Failure: Simulation Completed Successfully
+Time: 65345 ns  Iteration: 0  Process: /tb_radar_core/line__65  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+$finish called at time : 65345 ns : File "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd" Line 106

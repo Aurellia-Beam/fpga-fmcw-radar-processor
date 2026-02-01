@@ -1,0 +1,8 @@
+0.7
+2020.2
+Nov 14 2025
+19:37:27
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd,1769921084,vhdl,,,,radar_core,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd,1769919268,vhdl,,,,tb_radar_core,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd,1769921495,vhdl,,,,window_multiplier,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0/sim/xfft_0.vhd,1769919775,vhdl,,,,xfft_0,,,,,,,,
