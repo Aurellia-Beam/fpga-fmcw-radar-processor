@@ -70,7 +70,7 @@ begin
 
     -- Main Stimulus Process
     stim_proc: process
-        file input_file  : text open read_mode is "../../../model/data/golden_input_chirp.txt";
+        file input_file  : text open read_mode is "golden_input_chirp.txt";
         file output_file : text open write_mode is "output_verification.txt";
         
         variable inline    : line;
