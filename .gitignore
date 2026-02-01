@@ -1,0 +1,29 @@
+# Vivado Logs and Journals
+*.jou
+*.log
+*.str
+*.dmp
+
+# Vivado Internal Work Directories
+.Xil/
+.cache/
+.ip_user_files/
+.hw/
+.sim/
+
+# Output Products
+*.bit
+*.bin
+*.dcp
+*.wdb
+*.wcfg
+
+# Python/MATLAB garbage
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.asv
+
+# OS junk
+.DS_Store
+Thumbs.db
