@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCW Radar Corner Turner Visualization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #1e3c72;
+        }
+        
+        .matrix-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .matrix {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 10px;
+        }
+        
+        .matrix h3 {
+            text-align: center;
+            color: #1e3c72;
+            margin-top: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            margin: 10px auto;
+        }
+        
+        td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 11px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        td:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px rgba(30, 60, 114, 0.5);
+            z-index: 10;
+        }
+        
+        .arrow {
+            font-size: 48px;
+            color: #1e3c72;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+        }
+        
+        button:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            margin-top: 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: #ffd700 !important;
+            animation: highlight 1s;
+        }
+        
+        @keyframes highlight {
+            0%, 100% { background: #ffd700; }
+            50% { background: #ffed4e; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 FMCW Radar Corner Turner</h1>
+        <div class="subtitle">Matrix Transpose for Range-Doppler Processing</div>
+        
+        <div class="info-box">
+            <h3>📡 What is a Corner Turner?</h3>
+            <p>
+                In FMCW radar, data arrives <strong>chirp-by-chirp</strong> (row-wise), but we need to process it 
+                <strong>range-bin-by-range-bin</strong> (column-wise) for Doppler analysis. The corner turner 
+                performs this critical matrix transpose operation in real-time using ping-pong buffering.
+            </p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">1024</div>
+                <div class="stat-label">Range Bins</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">128</div>
+                <div class="stat-label">Chirps (Doppler)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">131,072</div>
+                <div class="stat-label">Total Samples</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">~1 MB</div>
+                <div class="stat-label">BRAM Usage</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Matrix Transpose Visualization</h2>
+            <p style="text-align: center; color: #666;">
+                Click on any cell to highlight its transpose. Click "Animate" to see the transformation.
+            </p>
+            
+            <div class="controls">
+                <button onclick="animateTranspose()">▶️ Animate Transpose</button>
+                <button onclick="resetMatrices()">🔄 Reset</button>
+                <button onclick="highlightRandom()">🎲 Random Highlight</button>
+            </div>
+            
+            <div class="matrix-container">
+                <div class="matrix">
+                    <h3>📥 Input (Row-wise)</h3>
+                    <p style="text-align: center; font-size: 12px; color: #666;">
+                        Range FFT Output<br>
+                        Chirp × Range Bin
+                    </p>
+                    <table id="inputMatrix"></table>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="matrix">
+                    <h3>📤 Output (Column-wise)</h3>
+                    <p style="text-align: center; font-size: 12px; color: #666;">
+                        Ready for Doppler FFT<br>
+                        Range Bin × Chirp
+                    </p>
+                    <table id="outputMatrix"></table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 VHDL Implementation Highlights</h2>
+            <ul>
+                <li><strong>Ping-Pong Architecture:</strong> Dual BRAM banks for simultaneous write/read</li>
+                <li><strong>Write Address:</strong> <code>chirp × N_RANGE + sample</code></li>
+                <li><strong>Read Address:</strong> <code>range_bin × N_DOPPLER + chirp</code></li>
+                <li><strong>AXI4-Stream:</strong> Full backpressure support with TREADY/TVALID</li>
+                <li><strong>FSM States:</strong> WRITE_A_READ_B ⇄ WRITE_B_READ_A</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Pipeline Position</h2>
+            <div style="text-align: center; font-family: monospace; font-size: 14px; background: #e9ecef; padding: 20px; border-radius: 8px;">
+                ADC → Window → Range FFT → <span style="background: #ffd700; padding: 5px; border-radius: 4px; font-weight: bold;">CORNER TURNER</span> → Doppler FFT → CFAR
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ROWS = 12;  // Reduced for visualization (represents 128)
+        const COLS = 16;  // Reduced for visualization (represents 1024)
+        
+        let inputMatrix = [];
+        let outputMatrix = [];
+        
+        function initMatrices() {
+            const inputTable = document.getElementById('inputMatrix');
+            const outputTable = document.getElementById('outputMatrix');
+            
+            inputTable.innerHTML = '';
+            outputTable.innerHTML = '';
+            inputMatrix = [];
+            outputMatrix = [];
+            
+            // Create input matrix (chirps × range bins)
+            for (let chirp = 0; chirp < ROWS; chirp++) {
+                const row = inputTable.insertRow();
+                inputMatrix[chirp] = [];
+                for (let range = 0; range < COLS; range++) {
+                    const cell = row.insertCell();
+                    const value = chirp * COLS + range;
+                    cell.textContent = value;
+                    cell.style.background = `hsl(${(value * 360) / (ROWS * COLS)}, 70%, 80%)`;
+                    cell.onclick = () => highlightPair(chirp, range);
+                    inputMatrix[chirp][range] = value;
+                }
+            }
+            
+            // Create output matrix (range bins × chirps) - TRANSPOSED
+            for (let range = 0; range < COLS; range++) {
+                const row = outputTable.insertRow();
+                outputMatrix[range] = [];
+                for (let chirp = 0; chirp < ROWS; chirp++) {
+                    const cell = row.insertCell();
+                    const value = inputMatrix[chirp][range];
+                    cell.textContent = value;
+                    cell.style.background = `hsl(${(value * 360) / (ROWS * COLS)}, 70%, 80%)`;
+                    cell.onclick = () => highlightPair(chirp, range);
+                    outputMatrix[range][chirp] = value;
+                }
+            }
+        }
+        
+        function highlightPair(chirp, range) {
+            resetHighlight();
+            
+            // Highlight in input matrix
+            const inputTable = document.getElementById('inputMatrix');
+            inputTable.rows[chirp].cells[range].classList.add('highlight');
+            
+            // Highlight in output matrix (transposed)
+            const outputTable = document.getElementById('outputMatrix');
+            outputTable.rows[range].cells[chirp].classList.add('highlight');
+        }
+        
+        function resetHighlight() {
+            document.querySelectorAll('td').forEach(cell => {
+                cell.classList.remove('highlight');
+            });
+        }
+        
+        function resetMatrices() {
+            resetHighlight();
+        }
+        
+        function highlightRandom() {
+            const chirp = Math.floor(Math.random() * ROWS);
+            const range = Math.floor(Math.random() * COLS);
+            highlightPair(chirp, range);
+        }
+        
+        async function animateTranspose() {
+            resetHighlight();
+            
+            for (let chirp = 0; chirp < ROWS; chirp++) {
+                for (let range = 0; range < COLS; range++) {
+                    highlightPair(chirp, range);
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+            }
+        }
+        
+        // Initialize on load
+        initMatrices();
+    </script>
+</body>
+</html>

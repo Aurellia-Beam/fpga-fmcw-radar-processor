@@ -1,0 +1,7 @@
+Running: xsim.dir/tb_corner_turner_behav/xsimk.exe -simmode gui -wdb tb_corner_turner_behav.wdb -simrunnum 0 -socket 54675
+Design successfully loaded
+Design Loading Memory Usage: 41544 KB (Peak: 41544 KB)
+Design Loading CPU Usage: 77 ms
+Simulation completed
+Simulation Memory Usage: 67760 KB (Peak: 67760 KB)
+Simulation CPU Usage: 8531 ms

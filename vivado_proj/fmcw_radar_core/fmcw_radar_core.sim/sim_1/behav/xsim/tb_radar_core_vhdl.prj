@@ -1,9 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_0/sim/xfft_0.vhd" \
-"../../../../../../rtl/src/radar_core.vhd" \
-"../../../../../../rtl/src/window_multiplier.vhd" \
-"../../../../../../rtl/src/tb_radar_core.vhd" \
-
-# Do not sort compile order
-nosort
