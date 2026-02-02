@@ -75,8 +75,8 @@ set_property ip_output_repo c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-p
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_ip -quiet c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.srcs/sources_1/ip/xfft_doppler/xfft_doppler.xci
-set_property used_in_implementation false [get_files -all c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_ooc.xdc]
+read_ip -quiet c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.srcs/sources_1/ip/xfft_doppler_1/xfft_doppler.xci
+set_property used_in_implementation false [get_files -all c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -147,32 +147,32 @@ generate_parallel_reports -reports { "report_utilization -file xfft_doppler_util
 OPTRACE "synth reports" END { }
 
 if { [catch {
-  file copy -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler.dcp c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler.dcp
+  file copy -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler.dcp c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 status "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  write_verilog -force -mode synth_stub c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.v
+  write_verilog -force -mode synth_stub c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode synth_stub c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.vhdl
+  write_vhdl -force -mode synth_stub c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_verilog -force -mode funcsim c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_sim_netlist.v
+  write_verilog -force -mode funcsim c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode funcsim c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_sim_netlist.vhdl
+  write_vhdl -force -mode funcsim c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -182,32 +182,32 @@ if { [catch {
 
 
 if { [catch {
-  file copy -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler.dcp c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler.dcp
+  file copy -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler.dcp c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 status "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_stub.v c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.v
+  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_stub.v c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_stub.vhdl c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.vhdl
+  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_stub.vhdl c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_sim_netlist.v c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_sim_netlist.v
+  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_sim_netlist.v c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_sim_netlist.vhdl c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_sim_netlist.vhdl
+  file rename -force C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler_sim_netlist.vhdl c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -217,13 +217,13 @@ close [open .end.used_ip_cache.rst w]
 
 if {[file isdir C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler]} {
   catch { 
-    file copy -force c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.v C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler
+    file copy -force c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.v C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler
   }
 }
 
 if {[file isdir C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler]} {
   catch { 
-    file copy -force c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/xfft_doppler_stub.vhdl C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler
+    file copy -force c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler_stub.vhdl C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.ip_user_files/ip/xfft_doppler
   }
 }
 file delete __synthesis_is_running__

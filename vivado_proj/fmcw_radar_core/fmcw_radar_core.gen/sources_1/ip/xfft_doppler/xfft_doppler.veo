@@ -56,7 +56,7 @@
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 xfft_doppler your_instance_name (
   .aclk(aclk),                                                // input wire aclk
-  .s_axis_config_tdata(s_axis_config_tdata),                  // input wire [15 : 0] s_axis_config_tdata
+  .s_axis_config_tdata(s_axis_config_tdata),                  // input wire [7 : 0] s_axis_config_tdata
   .s_axis_config_tvalid(s_axis_config_tvalid),                // input wire s_axis_config_tvalid
   .s_axis_config_tready(s_axis_config_tready),                // output wire s_axis_config_tready
   .s_axis_data_tdata(s_axis_data_tdata),                      // input wire [31 : 0] s_axis_data_tdata

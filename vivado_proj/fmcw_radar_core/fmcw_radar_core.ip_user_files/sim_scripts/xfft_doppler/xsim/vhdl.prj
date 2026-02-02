@@ -1,5 +1,0 @@
-vhdl xil_defaultlib  \
-"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_doppler/sim/xfft_doppler.vhd" \
-
-# Do not sort compile order
-nosort

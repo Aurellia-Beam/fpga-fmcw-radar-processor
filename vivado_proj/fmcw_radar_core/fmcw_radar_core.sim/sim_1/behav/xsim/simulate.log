@@ -9,12 +9,18 @@ Note:   - Copying SCALE_SCH from 8 downto 1 to 8 downto 1
 Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
 Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
 Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
-Note: Waiting for core readiness (s_axis_tready = '1')...
+Note:     - C_CHANNELS  = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - field_width = 10
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - Copying SCALE_SCH from 10 downto 1 to 10 downto 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note: Waiting for core ready...
 Time: 25 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
-Note: Core ready. Starting data transmission.
-Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
-Note: === Generating CPI 0 ===
-Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: Core ready.
+Time: 85 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: CPI 0
+Time: 85 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
 Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
 Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
 Note:     - C_CHANNELS  = 1
@@ -25,9 +31,15 @@ Note:   - Copying SCALE_SCH from 8 downto 1 to 8 downto 1
 Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
 Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
 Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
-Note: Waiting for core readiness (s_axis_tready = '1')...
+Note:     - C_CHANNELS  = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - field_width = 10
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - Copying SCALE_SCH from 10 downto 1 to 10 downto 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note: Waiting for core ready...
 Time: 25 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
-Note: Core ready. Starting data transmission.
-Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
-Note: === Generating CPI 0 ===
-Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: Core ready.
+Time: 85 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: CPI 0
+Time: 85 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd

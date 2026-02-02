@@ -37,34 +37,38 @@ architecture Behavioral of corner_turner is
     attribute ram_style of ram_bank0 : signal is "block";
     attribute ram_style of ram_bank1 : signal is "block";
     
-    signal wr_addr        : unsigned(ADDR_WIDTH-1 downto 0) := (others => '0');
-    signal wr_bank_sel    : std_logic := '0';
-    signal wr_chirp_cnt   : unsigned(6 downto 0) := (others => '0');
-    signal wr_sample_cnt  : unsigned(9 downto 0) := (others => '0');
-    signal wr_frame_done  : std_logic := '0';
-    signal s_tready_int   : std_logic := '0';
+    -- Write side
+    signal wr_chirp     : unsigned(6 downto 0) := (others => '0');
+    signal wr_sample    : unsigned(9 downto 0) := (others => '0');
+    signal wr_bank_sel  : std_logic := '0';
+    signal wr_frame_done: std_logic := '0';
+    signal s_tready_int : std_logic := '0';
     
-    signal rd_bank_sel    : std_logic := '0';
-    signal rd_range_cnt   : unsigned(9 downto 0) := (others => '0');
-    signal rd_doppler_cnt : unsigned(6 downto 0) := (others => '0');
-    signal rd_base_addr   : unsigned(ADDR_WIDTH-1 downto 0) := (others => '0');
-    signal rd_addr        : unsigned(ADDR_WIDTH-1 downto 0) := (others => '0');
-    signal rd_active      : std_logic := '0';
-    signal rd_frame_done  : std_logic := '0';
-    signal first_frame    : std_logic := '1';
+    -- Read side
+    signal rd_range     : unsigned(9 downto 0) := (others => '0');
+    signal rd_doppler   : unsigned(6 downto 0) := (others => '0');
+    signal rd_bank_sel  : std_logic := '0';
+    signal rd_active    : std_logic := '0';
+    signal rd_frame_done: std_logic := '0';
+    signal first_frame  : std_logic := '1';
     
-    signal rd_data_p1     : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-    signal rd_valid_p1    : std_logic := '0';
-    signal rd_last_p1     : std_logic := '0';
-    signal rd_data_p2     : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-    signal rd_valid_p2    : std_logic := '0';
-    signal rd_last_p2     : std_logic := '0';
+    -- Pipeline
+    signal rd_data_p1   : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal rd_valid_p1  : std_logic := '0';
+    signal rd_last_p1   : std_logic := '0';
+    signal rd_data_p2   : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal rd_valid_p2  : std_logic := '0';
+    signal rd_last_p2   : std_logic := '0';
     
-    signal out_valid      : std_logic := '0';
-    signal out_data       : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-    signal out_last       : std_logic := '0';
-    signal pipe_stall     : std_logic := '0';
-    signal overflow_flag  : std_logic := '0';
+    signal out_valid    : std_logic := '0';
+    signal out_data     : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal out_last     : std_logic := '0';
+    signal pipe_stall   : std_logic := '0';
+    signal overflow_flag: std_logic := '0';
+    
+    -- Explicit address calculations
+    signal wr_addr : integer range 0 to MATRIX_SIZE-1;
+    signal rd_addr : integer range 0 to MATRIX_SIZE-1;
 
 begin
 
@@ -74,14 +78,19 @@ begin
     m_axis_tlast   <= out_last;
     frame_complete <= rd_frame_done;
     overflow_error <= overflow_flag;
+    
+    -- Write: row-major = chirp * N_RANGE + sample
+    wr_addr <= to_integer(wr_chirp) * N_RANGE + to_integer(wr_sample);
+    
+    -- Read: column-major = range + doppler * N_RANGE
+    rd_addr <= to_integer(rd_range) + to_integer(rd_doppler) * N_RANGE;
 
     write_proc: process(aclk)
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                wr_addr       <= (others => '0');
-                wr_chirp_cnt  <= (others => '0');
-                wr_sample_cnt <= (others => '0');
+                wr_chirp      <= (others => '0');
+                wr_sample     <= (others => '0');
                 wr_bank_sel   <= '0';
                 wr_frame_done <= '0';
                 s_tready_int  <= '0';
@@ -97,25 +106,22 @@ begin
                 
                 if s_axis_tvalid = '1' and s_tready_int = '1' then
                     if wr_bank_sel = '0' then
-                        ram_bank0(to_integer(wr_addr)) <= s_axis_tdata;
+                        ram_bank0(wr_addr) <= s_axis_tdata;
                     else
-                        ram_bank1(to_integer(wr_addr)) <= s_axis_tdata;
+                        ram_bank1(wr_addr) <= s_axis_tdata;
                     end if;
                     
-                    wr_addr <= wr_addr + 1;
-                    
                     if s_axis_tlast = '1' then
-                        wr_sample_cnt <= (others => '0');
-                        if wr_chirp_cnt = N_DOPPLER - 1 then
-                            wr_chirp_cnt  <= (others => '0');
-                            wr_addr       <= (others => '0');
+                        wr_sample <= (others => '0');
+                        if wr_chirp = N_DOPPLER - 1 then
+                            wr_chirp      <= (others => '0');
                             wr_frame_done <= '1';
-                            wr_bank_sel   <= not wr_bank_sel;
+                            wr_bank_sel   <= wr_bank_sel;
                         else
-                            wr_chirp_cnt <= wr_chirp_cnt + 1;
+                            wr_chirp <= wr_chirp + 1;
                         end if;
                     else
-                        wr_sample_cnt <= wr_sample_cnt + 1;
+                        wr_sample <= wr_sample + 1;
                     end if;
                 end if;
             end if;
@@ -126,60 +132,51 @@ begin
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                rd_range_cnt   <= (others => '0');
-                rd_doppler_cnt <= (others => '0');
-                rd_base_addr   <= (others => '0');
-                rd_addr        <= (others => '0');
-                rd_bank_sel    <= '0';
-                rd_active      <= '0';
-                rd_frame_done  <= '0';
-                first_frame    <= '1';
-                rd_valid_p1    <= '0';
-                rd_last_p1     <= '0';
-                rd_valid_p2    <= '0';
-                rd_last_p2     <= '0';
+                rd_range      <= (others => '0');
+                rd_doppler    <= (others => '0');
+                rd_bank_sel   <= '0';
+                rd_active     <= '0';
+                rd_frame_done <= '0';
+                first_frame   <= '1';
+                rd_valid_p1   <= '0';
+                rd_last_p1    <= '0';
+                rd_valid_p2   <= '0';
+                rd_last_p2    <= '0';
             else
                 rd_frame_done <= '0';
                 pipe_stall <= out_valid and (not m_axis_tready);
                 
                 if wr_frame_done = '1' and rd_active = '0' then
-                    rd_active      <= '1';
-                    rd_range_cnt   <= (others => '0');
-                    rd_doppler_cnt <= (others => '0');
-                    rd_base_addr   <= (others => '0');
-                    rd_addr        <= (others => '0');
-                    rd_bank_sel    <= not wr_bank_sel;
-                    first_frame    <= '0';
+                    rd_active    <= '1';
+                    rd_range     <= (others => '0');
+                    rd_doppler   <= (others => '0');
+                    rd_bank_sel  <= not wr_bank_sel;
+                    first_frame  <= '0';
                 end if;
                 
                 if pipe_stall = '0' then
                     if rd_active = '1' then
                         if rd_bank_sel = '0' then
-                            rd_data_p1 <= ram_bank0(to_integer(rd_addr));
+                            rd_data_p1 <= ram_bank0(rd_addr);
                         else
-                            rd_data_p1 <= ram_bank1(to_integer(rd_addr));
+                            rd_data_p1 <= ram_bank1(rd_addr);
                         end if;
                         
                         rd_valid_p1 <= '1';
-                        rd_last_p1  <= '1' when rd_doppler_cnt = N_DOPPLER - 1 else '0';
+                        rd_last_p1  <= '1' when rd_doppler = N_DOPPLER - 1 else '0';
                         
-                        -- Column-major read: stride by N_RANGE for each Doppler bin
-                        if rd_doppler_cnt = N_DOPPLER - 1 then
-                            rd_doppler_cnt <= (others => '0');
-                            if rd_range_cnt = N_RANGE - 1 then
-                                rd_range_cnt  <= (others => '0');
-                                rd_base_addr  <= (others => '0');
-                                rd_addr       <= (others => '0');
+                        -- Advance: doppler varies fast (output one range bin's worth of Doppler samples)
+                        if rd_doppler = N_DOPPLER - 1 then
+                            rd_doppler <= (others => '0');
+                            if rd_range = N_RANGE - 1 then
+                                rd_range      <= (others => '0');
                                 rd_active     <= '0';
                                 rd_frame_done <= '1';
                             else
-                                rd_range_cnt <= rd_range_cnt + 1;
-                                rd_base_addr <= rd_base_addr + 1;
-                                rd_addr      <= rd_base_addr + 1;
+                                rd_range <= rd_range + 1;
                             end if;
                         else
-                            rd_doppler_cnt <= rd_doppler_cnt + 1;
-                            rd_addr        <= rd_addr + N_RANGE;
+                            rd_doppler <= rd_doppler + 1;
                         end if;
                     else
                         rd_valid_p1 <= '0';

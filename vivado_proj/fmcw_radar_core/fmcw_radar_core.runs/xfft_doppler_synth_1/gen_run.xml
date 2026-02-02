@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="xfft_doppler_synth_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1770011222">
+<GenRun Id="xfft_doppler_synth_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1770032471">
   <File Type="REPORTS-TCL" Name="xfft_doppler_reports.tcl"/>
   <File Type="RDS-UTIL" Name="xfft_doppler_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="xfft_doppler_utilization_synth.pb"/>
@@ -7,7 +7,7 @@
   <File Type="RDS-RDS" Name="xfft_doppler.vds"/>
   <File Type="RDS-DCP" Name="xfft_doppler.dcp"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/xfft_doppler" RelGenDir="$PGENDIR/xfft_doppler">
-    <File Path="$PSRCDIR/sources_1/ip/xfft_doppler/xfft_doppler.xci">
+    <File Path="$PSRCDIR/sources_1/ip/xfft_doppler_1/xfft_doppler.xci">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
@@ -20,7 +20,7 @@
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="BlockSrcs" RelSrcDir="$PSRCDIR/xfft_doppler" RelGenDir="$PGENDIR/xfft_doppler">
-    <File Path="$PSRCDIR/sources_1/ip/xfft_doppler/xfft_doppler.xci">
+    <File Path="$PSRCDIR/sources_1/ip/xfft_doppler_1/xfft_doppler.xci">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

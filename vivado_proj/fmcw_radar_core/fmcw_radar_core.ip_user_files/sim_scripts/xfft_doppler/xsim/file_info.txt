@@ -1,1 +1,0 @@
-xfft_doppler.vhd,vhdl,xil_defaultlib,../../../../fmcw_radar_core.gen/sources_1/ip/xfft_doppler/sim/xfft_doppler.vhd,incdir="../../../../../../../../../../../AMDDesignTools/2025.2/Vivado/data/rsb/busdef"

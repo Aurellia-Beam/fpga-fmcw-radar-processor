@@ -3,8 +3,8 @@
 # SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
 # IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
 # SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
-# Start of session at: Sun Feb  1 23:47:04 2026
-# Process ID         : 4100
+# Start of session at: Mon Feb  2 05:41:13 2026
+# Process ID         : 10000
 # Current directory  : C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1
 # Command line       : vivado.exe -log xfft_doppler.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source xfft_doppler.tcl
 # Log file           : C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/xfft_doppler_synth_1/xfft_doppler.vds
@@ -19,6 +19,6 @@
 # Host memory        : 33804 MB
 # Swap memory        : 2147 MB
 # Total Virtual      : 35952 MB
-# Available Virtual  : 10178 MB
+# Available Virtual  : 8831 MB
 #-----------------------------------------------------------
 source xfft_doppler.tcl -notrace

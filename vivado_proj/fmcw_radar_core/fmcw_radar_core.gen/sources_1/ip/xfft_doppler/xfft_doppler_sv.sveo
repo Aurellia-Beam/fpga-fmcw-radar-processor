@@ -63,7 +63,7 @@
 // INTF_TAG     ------ Begin cut for INTERFACE INSTANTIATION Template ------
 vivado_axis_v1_0 #(.TDATA_NUM_BYTES(4), .TDEST_WIDTH(0), .TID_WIDTH(0), .TUSER_WIDTH(0)) S_AXIS_DATA();
 vivado_axis_v1_0 #(.TDATA_NUM_BYTES(4), .TDEST_WIDTH(0), .TID_WIDTH(0), .TUSER_WIDTH(0)) M_AXIS_DATA();
-vivado_axis_v1_0 #(.TDATA_NUM_BYTES(2), .TDEST_WIDTH(0), .TID_WIDTH(0), .TUSER_WIDTH(0)) S_AXIS_CONFIG();
+vivado_axis_v1_0 #(.TDEST_WIDTH(0), .TID_WIDTH(0), .TUSER_WIDTH(0)) S_AXIS_CONFIG();
 // INTF_TAG_END ------  End cut for INTERFACE INSTANTIATION Template  ------
 
 // INST_TAG     ------ Begin cut for WRAPPER INSTANTIATION Template ------

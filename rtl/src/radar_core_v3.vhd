@@ -47,7 +47,8 @@ architecture Behavioral of radar_core_v3 is
     COMPONENT xfft_0
       PORT (
         aclk : IN STD_LOGIC;
-        s_axis_config_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        aresetn : IN STD_LOGIC;
+        s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
         s_axis_config_tvalid : IN STD_LOGIC;
         s_axis_config_tready : OUT STD_LOGIC;
         s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -55,13 +56,9 @@ architecture Behavioral of radar_core_v3 is
         s_axis_data_tready : OUT STD_LOGIC;
         s_axis_data_tlast : IN STD_LOGIC;
         m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         m_axis_data_tvalid : OUT STD_LOGIC;
         m_axis_data_tready : IN STD_LOGIC;
         m_axis_data_tlast : OUT STD_LOGIC;
-        m_axis_status_tdata : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-        m_axis_status_tvalid : OUT STD_LOGIC;
-        m_axis_status_tready : IN STD_LOGIC;
         event_frame_started : OUT STD_LOGIC;
         event_tlast_unexpected : OUT STD_LOGIC;
         event_tlast_missing : OUT STD_LOGIC;
@@ -74,6 +71,7 @@ architecture Behavioral of radar_core_v3 is
     COMPONENT xfft_doppler
       PORT (
         aclk : IN STD_LOGIC;
+        aresetn : IN STD_LOGIC;
         s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
         s_axis_config_tvalid : IN STD_LOGIC;
         s_axis_config_tready : OUT STD_LOGIC;
@@ -122,10 +120,10 @@ architecture Behavioral of radar_core_v3 is
         );
     end component;
 
-    -- 8-bit config only provides /64; post-FFT scaler adds remaining /16 for full /1024
-    constant RANGE_FFT_CONFIG : std_logic_vector(7 downto 0) := x"D5";
-    -- 16-bit config has room for full /128 scaling
-    constant DOPPLER_FFT_CONFIG : std_logic_vector(15 downto 0) := x"0155";
+    -- 1024-pt range FFT, 16-bit config
+    constant RANGE_FFT_CONFIG : std_logic_vector(15 downto 0) := x"0001";
+    -- 128-pt doppler FFT, 16-bit config
+    constant DOPPLER_FFT_CONFIG : std_logic_vector(15 downto 0) := x"0001";
 
     signal win1_to_rfft_data  : STD_LOGIC_VECTOR(31 downto 0);
     signal win1_to_rfft_valid : STD_LOGIC;
@@ -225,6 +223,7 @@ begin
     u_range_fft : xfft_0
     port map (
         aclk => aclk,
+        aresetn => aresetn,
         s_axis_config_tdata  => RANGE_FFT_CONFIG,
         s_axis_config_tvalid => rfft_cfg_valid,
         s_axis_config_tready => rfft_cfg_ready,
@@ -236,10 +235,6 @@ begin
         m_axis_data_tvalid   => rfft_raw_valid,
         m_axis_data_tready   => rfft_raw_ready,
         m_axis_data_tlast    => rfft_raw_last,
-        m_axis_data_tuser    => open,
-        m_axis_status_tdata  => open,
-        m_axis_status_tvalid => open,
-        m_axis_status_tready => '1',
         event_frame_started  => rfft_frame_started,
         event_tlast_unexpected      => open,
         event_tlast_missing         => open,
@@ -248,32 +243,10 @@ begin
         event_data_out_channel_halt => open
     );
 
-    rfft_raw_ready <= rfft_to_ct_ready;
-    
-    range_scaler_proc: process(aclk)
-        variable i_in, q_in, i_out, q_out : signed(15 downto 0);
-    begin
-        if rising_edge(aclk) then
-            if aresetn = '0' then
-                rfft_to_ct_data  <= (others => '0');
-                rfft_to_ct_valid <= '0';
-                rfft_to_ct_last  <= '0';
-            elsif rfft_to_ct_ready = '1' then
-                if rfft_raw_valid = '1' then
-                    i_in := signed(rfft_raw_data(15 downto 0));
-                    q_in := signed(rfft_raw_data(31 downto 16));
-                    i_out := shift_right(i_in, 4);
-                    q_out := shift_right(q_in, 4);
-                    rfft_to_ct_data <= std_logic_vector(q_out) & std_logic_vector(i_out);
-                    rfft_to_ct_valid <= '1';
-                    rfft_to_ct_last  <= rfft_raw_last;
-                else
-                    rfft_to_ct_valid <= '0';
-                    rfft_to_ct_last  <= '0';
-                end if;
-            end if;
-        end if;
-    end process;
+    rfft_to_ct_data  <= rfft_raw_data;
+    rfft_to_ct_valid <= rfft_raw_valid;
+    rfft_to_ct_last  <= rfft_raw_last;
+    rfft_raw_ready   <= rfft_to_ct_ready;
 
     u_corner_turner : corner_turner
     generic map ( N_RANGE => N_RANGE, N_DOPPLER => N_DOPPLER, DATA_WIDTH => 32 )
@@ -309,6 +282,7 @@ begin
     u_doppler_fft : xfft_doppler
     port map (
         aclk => aclk,
+        aresetn => aresetn,
         s_axis_config_tdata  => DOPPLER_FFT_CONFIG,
         s_axis_config_tvalid => dfft_cfg_valid,
         s_axis_config_tready => dfft_cfg_ready,

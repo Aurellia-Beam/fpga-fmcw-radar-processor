@@ -1004,7 +1004,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1019,11 +1019,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1036,12 +1036,8 @@
         </spirit:fileSetRef>
         <spirit:parameters>
           <spirit:parameter>
-            <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 10:20:01 UTC 2026</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1055,11 +1051,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1074,11 +1070,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1092,11 +1088,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1142,11 +1138,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:d4e2c901</spirit:value>
+            <spirit:value>9:b38a930b</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1162,11 +1158,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:d4e2c901</spirit:value>
+            <spirit:value>9:b38a930b</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1212,11 +1208,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1232,11 +1228,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1252,11 +1248,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Feb 02 07:50:30 UTC 2026</spirit:value>
+            <spirit:value>Mon Feb 02 11:27:59 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:a0a607ae</spirit:value>
+            <spirit:value>9:0a06db95</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1757,7 +1753,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_NFFT_MAX</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_NFFT_MAX">10</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_NFFT_MAX">8</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_ARCH</spirit:name>
@@ -1833,7 +1829,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_BRAM_STAGES</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BRAM_STAGES">3</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BRAM_STAGES">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_REORDER_MEM_TYPE</spirit:name>
@@ -1867,14 +1863,6 @@
   </spirit:model>
   <spirit:choices>
     <spirit:choice>
-      <spirit:name>choice_list_51d58f04</spirit:name>
-      <spirit:enumeration>1</spirit:enumeration>
-      <spirit:enumeration>2</spirit:enumeration>
-      <spirit:enumeration>3</spirit:enumeration>
-      <spirit:enumeration>4</spirit:enumeration>
-      <spirit:enumeration>5</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
       <spirit:name>choice_list_5b37c775</spirit:name>
       <spirit:enumeration>1</spirit:enumeration>
       <spirit:enumeration>2</spirit:enumeration>
@@ -1888,6 +1876,13 @@
       <spirit:enumeration>10</spirit:enumeration>
       <spirit:enumeration>11</spirit:enumeration>
       <spirit:enumeration>12</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_6e3ded9c</spirit:name>
+      <spirit:enumeration>0</spirit:enumeration>
+      <spirit:enumeration>1</spirit:enumeration>
+      <spirit:enumeration>2</spirit:enumeration>
+      <spirit:enumeration>3</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_769cfb1f</spirit:name>
@@ -1952,12 +1947,6 @@
       <spirit:enumeration spirit:text="Real Time">realtime</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_pairs_50324ae3</spirit:name>
-      <spirit:enumeration spirit:text="Fixed Point">fixed_point</spirit:enumeration>
-      <spirit:enumeration spirit:text="Floating Point (pseudo)">floating_point</spirit:enumeration>
-      <spirit:enumeration spirit:text="native floating point">native_floating_point</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
       <spirit:name>choice_pairs_5f99d630</spirit:name>
       <spirit:enumeration spirit:text="Automatically Select">automatically_select</spirit:enumeration>
       <spirit:enumeration spirit:text="Pipelined, Streaming I/O">pipelined_streaming_io</spirit:enumeration>
@@ -1986,6 +1975,11 @@
       <spirit:enumeration spirit:text="Block Floating Point">block_floating_point</spirit:enumeration>
       <spirit:enumeration spirit:text="Scaled">scaled</spirit:enumeration>
       <spirit:enumeration spirit:text="Unscaled">unscaled</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_b279e969</spirit:name>
+      <spirit:enumeration spirit:text="Fixed Point">fixed_point</spirit:enumeration>
+      <spirit:enumeration spirit:text="Floating Point (pseudo)">floating_point</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_pairs_d9974fab</spirit:name>
@@ -2461,7 +2455,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>transform_length</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.transform_length" spirit:choiceRef="choice_list_769cfb1f" spirit:order="3">1024</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.transform_length" spirit:choiceRef="choice_list_769cfb1f" spirit:order="3">256</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>target_clock_frequency</spirit:name>
@@ -2481,7 +2475,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>data_format</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.data_format" spirit:choiceRef="choice_pairs_50324ae3" spirit:order="8">fixed_point</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.data_format" spirit:choiceRef="choice_pairs_b279e969" spirit:order="8">fixed_point</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>input_width</spirit:name>
@@ -2541,7 +2535,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>number_of_stages_using_block_ram_for_data_and_phase_factors</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.number_of_stages_using_block_ram_for_data_and_phase_factors" spirit:choiceRef="choice_list_51d58f04" spirit:order="23">3</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.number_of_stages_using_block_ram_for_data_and_phase_factors" spirit:choiceRef="choice_list_6e3ded9c" spirit:order="23">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>memory_options_hybrid</spirit:name>
@@ -2621,6 +2615,7 @@
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.run_time_configurable_transform_length" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.scaling_options" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.target_clock_frequency" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.transform_length" xilinx:valueSource="user"/>
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>

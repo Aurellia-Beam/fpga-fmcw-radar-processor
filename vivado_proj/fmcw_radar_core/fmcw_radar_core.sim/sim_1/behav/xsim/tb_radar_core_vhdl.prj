@@ -1,7 +1,7 @@
 # compile vhdl design source files
 vhdl xil_defaultlib  \
-"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_doppler/sim/xfft_doppler.vhd" \
-"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_0/sim/xfft_0.vhd" \
+"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/sim/xfft_doppler.vhd" \
+"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_0_1/sim/xfft_0.vhd" \
 
 vhdl2008 xil_defaultlib  \
 "../../../../../../rtl/src/corner_turner.vhd" \

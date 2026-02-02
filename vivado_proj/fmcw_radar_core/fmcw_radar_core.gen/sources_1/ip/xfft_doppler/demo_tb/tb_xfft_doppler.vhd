@@ -92,7 +92,7 @@ architecture tb of tb_xfft_doppler is
   -- Config slave channel signals
   signal s_axis_config_tvalid        : std_logic := '0';  -- payload is valid
   signal s_axis_config_tready        : std_logic := '1';  -- slave is ready
-  signal s_axis_config_tdata         : std_logic_vector(15 downto 0) := (others => '0');  -- data payload
+  signal s_axis_config_tdata         : std_logic_vector(7 downto 0) := (others => '0');  -- data payload
 
   -- Data slave channel signals
   signal s_axis_data_tvalid          : std_logic := '0';  -- payload is valid
@@ -123,7 +123,7 @@ architecture tb of tb_xfft_doppler is
   -- Config slave channel alias signals
 
       signal s_axis_config_tdata_fwd_inv      : std_logic := '0'; -- forward or inverse
-      signal s_axis_config_tdata_scale_sch    : std_logic_vector(7 downto 0) := (others => '0');  -- scaling schedule
+      signal s_axis_config_tdata_scale_sch    : std_logic_vector(5 downto 0) := (others => '0');  -- scaling schedule
 
   -- Data slave channel alias signals
         signal s_axis_data_tdata_re             : std_logic_vector(15 downto 0) := (others => '0');  -- real data
@@ -139,7 +139,7 @@ architecture tb of tb_xfft_doppler is
   -----------------------------------------------------------------------
 
   constant IP_WIDTH    : integer := 16;
-  constant MAX_SAMPLES : integer := 2**7;  -- maximum number of samples in a frame
+  constant MAX_SAMPLES : integer := 2**5;  -- maximum number of samples in a frame
   type T_IP_SAMPLE is record
     re : std_logic_vector(IP_WIDTH-1 downto 0);
     im : std_logic_vector(IP_WIDTH-1 downto 0);
@@ -152,11 +152,9 @@ architecture tb of tb_xfft_doppler is
 
   -- Function to generate input data table
   -- Data is a complex sinusoid exp(-jwt) with a frequency 2.6 times the frame size
-  -- added to another with a lower magnitude and a higher frequency
   function create_ip_table return T_IP_TABLE is
     variable result : T_IP_TABLE;
     variable theta  : real;
-    variable theta2 : real;
     variable re_real : real;
     variable im_real : real;
     variable re_int : integer;
@@ -167,9 +165,6 @@ architecture tb of tb_xfft_doppler is
       theta   := real(i) / real(MAX_SAMPLES) * 2.6 * 2.0 * MATH_PI;
       re_real := cos(-theta);
       im_real := sin(-theta);
-      theta2  := real(i) / real(MAX_SAMPLES) * 23.2 * 2.0 * MATH_PI;
-      re_real := re_real + (cos(-theta2) / 4.0);
-      im_real := im_real + (sin(-theta2) / 4.0);
       re_int  := integer(round(re_real * real(2**(DATA_WIDTH))));
       im_int  := integer(round(im_real * real(2**(DATA_WIDTH))));
       result(i).re := std_logic_vector(to_signed(re_int, IP_WIDTH));
@@ -443,7 +438,7 @@ begin
   -----------------------------------------------------------------------
 
   config_stimuli : process
-    variable scale_sch : std_logic_vector(7 downto 0);
+    variable scale_sch : std_logic_vector(5 downto 0);
   begin
 
     -- Drive a configuration when requested by data_stimuli process
@@ -474,12 +469,12 @@ begin
       scale_sch := (others => '0');
     elsif cfg_scale_sch = xDEFAULT then  -- default scaling, for largest magnitude output with no overflow guaranteed
       scale_sch(1 downto 0) := "11";  -- largest scaling at first stage
-      for s in 2 to 3 loop
+      for s in 2 to 2 loop
         scale_sch(s*2-1 downto s*2-2) := "10";  -- less scaling at later stages
       end loop;
-      scale_sch(7 downto 6) := "01";  -- least scaling at last stage
+      scale_sch(5 downto 4) := "01";  -- least scaling at last stage
     end if;
-    s_axis_config_tdata(8 downto 1) <= scale_sch;
+    s_axis_config_tdata(6 downto 1) <= scale_sch;
 
     -- Drive the transaction on the config slave channel
     s_axis_config_tvalid <= '1';
@@ -578,7 +573,7 @@ begin
   -- Config slave channel alias signals
 
   s_axis_config_tdata_fwd_inv    <= s_axis_config_tdata(0);
-  s_axis_config_tdata_scale_sch  <= s_axis_config_tdata(8 downto 1);
+  s_axis_config_tdata_scale_sch  <= s_axis_config_tdata(6 downto 1);
 
 
   -- Data slave channel alias signals

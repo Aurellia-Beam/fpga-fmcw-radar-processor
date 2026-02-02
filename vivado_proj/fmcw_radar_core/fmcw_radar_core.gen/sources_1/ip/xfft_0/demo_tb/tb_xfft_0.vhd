@@ -148,7 +148,7 @@ architecture tb of tb_xfft_0 is
   -----------------------------------------------------------------------
 
   constant IP_WIDTH    : integer := 16;
-  constant MAX_SAMPLES : integer := 2**10;  -- maximum number of samples in a frame
+  constant MAX_SAMPLES : integer := 2**8;  -- maximum number of samples in a frame
   type T_IP_SAMPLE is record
     re : std_logic_vector(IP_WIDTH-1 downto 0);
     im : std_logic_vector(IP_WIDTH-1 downto 0);
