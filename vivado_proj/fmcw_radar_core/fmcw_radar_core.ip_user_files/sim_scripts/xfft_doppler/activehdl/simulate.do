@@ -1,0 +1,14 @@
+transcript off
+onbreak {quit -force}
+onerror {quit -force}
+transcript on
+
+asim +access +r +m+xfft_doppler  -L xil_defaultlib -L xpm -L xbip_utils_v3_0_15 -L axi_utils_v2_0_11 -L c_reg_fd_v12_0_11 -L xbip_dsp48_wrapper_v3_0_7 -L xbip_pipe_v3_0_11 -L c_addsub_v12_0_21 -L c_shift_ram_v12_0_20 -L mult_gen_v12_0_24 -L floating_point_v7_1_21 -L cmpy_v6_0_27 -L xfft_v9_1_15 -L unisims_ver -L unimacro_ver -L secureip -O5 xil_defaultlib.xfft_doppler xil_defaultlib.glbl
+
+do {xfft_doppler.udo}
+
+run 1000ns
+
+endsim
+
+quit -force

@@ -1,0 +1,7 @@
+# compile vhdl design source files
+vhdl2008 xil_defaultlib  \
+"../../../../../../rtl/src/magnitude_calc.vhd" \
+"../../../../../../rtl/src/tb_magnitude_calc.vhd" \
+
+# Do not sort compile order
+nosort

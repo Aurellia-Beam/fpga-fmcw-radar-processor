@@ -1,7 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../../../rtl/src/corner_turner.vhd" \
-"../../../../../../rtl/src/tb_corner_turner.vhd" \
-
-# Do not sort compile order
-nosort

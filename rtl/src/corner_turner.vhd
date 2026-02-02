@@ -2,220 +2,295 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+-- =============================================================================
 -- Corner Turning Memory: Matrix Transpose for Range-Doppler Processing
--- Writes: Row-wise (Range bins from Range FFT)
--- Reads: Column-wise (for Doppler FFT)
--- Uses ping-pong buffering for continuous streaming
+-- =============================================================================
+-- Optimized for Xilinx FPGA synthesis with proper BRAM inference
+-- 
+-- Operation:
+--   Write: Row-wise (chirp-major order from Range FFT)
+--   Read:  Column-wise (range-bin-major order for Doppler FFT)
+--
+-- Memory Layout:
+--   Address = chirp * N_RANGE + sample  (write)
+--   Address = doppler * N_RANGE + range (read, transposed access)
+--
+-- Ping-Pong Architecture:
+--   - Bank A and Bank B alternate roles
+--   - While writing to one bank, read from the other
+--   - First frame has latency (must fill before reading)
+--
+-- Author: Senior Radar Systems Engineer
+-- =============================================================================
 
 entity corner_turner is
     Generic (
-        N_RANGE   : integer := 1024;  -- Range bins (rows)
-        N_DOPPLER : integer := 128;   -- Doppler bins / Number of chirps (columns)
-        DATA_WIDTH : integer := 32    -- Complex I/Q data (16+16)
+        N_RANGE    : integer := 1024;  -- Range bins per chirp
+        N_DOPPLER  : integer := 128;   -- Chirps per CPI (Doppler bins)
+        DATA_WIDTH : integer := 32     -- Complex I/Q: 16-bit I + 16-bit Q
     );
     Port (
         aclk      : in  STD_LOGIC;
         aresetn   : in  STD_LOGIC;
         
-        -- Input: Range FFT output (row-wise)
+        -- AXI-Stream Slave: Range FFT output (row-wise)
         s_axis_tdata  : in  STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
         s_axis_tvalid : in  STD_LOGIC;
         s_axis_tready : out STD_LOGIC;
-        s_axis_tlast  : in  STD_LOGIC;  -- End of one chirp (1024 samples)
+        s_axis_tlast  : in  STD_LOGIC;  -- End of chirp
         
-        -- Output: Column-wise for Doppler FFT
+        -- AXI-Stream Master: Column-wise output for Doppler FFT
         m_axis_tdata  : out STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
         m_axis_tvalid : out STD_LOGIC;
         m_axis_tready : in  STD_LOGIC;
-        m_axis_tlast  : out STD_LOGIC   -- End of one Doppler FFT frame (128 samples)
+        m_axis_tlast  : out STD_LOGIC;  -- End of Doppler column
+        
+        -- Status outputs (active high)
+        frame_complete : out STD_LOGIC;  -- Pulse when read frame completes
+        overflow_error : out STD_LOGIC   -- Write attempted while read incomplete
     );
 end corner_turner;
 
 architecture Behavioral of corner_turner is
 
-    -- Dual-port BRAM type
-    type ram_type is array (0 to N_RANGE*N_DOPPLER-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
+    -- =========================================================================
+    -- Constants
+    -- =========================================================================
+    constant MATRIX_SIZE : integer := N_RANGE * N_DOPPLER;
     
-    -- Ping-pong buffers
+    -- =========================================================================
+    -- BRAM Declarations with Xilinx synthesis attributes
+    -- =========================================================================
+    type ram_type is array (0 to MATRIX_SIZE-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
+    
     signal ram_a : ram_type := (others => (others => '0'));
     signal ram_b : ram_type := (others => (others => '0'));
     
-    -- Control signals
-    type state_type is (WRITE_A_READ_B, WRITE_B_READ_A);
-    signal state : state_type := WRITE_A_READ_B;
-    signal first_frame : std_logic := '1';  -- Cold start handling
+    -- Synthesis attributes for proper BRAM inference
+    attribute ram_style : string;
+    attribute ram_style of ram_a : signal is "block";
+    attribute ram_style of ram_b : signal is "block";
     
-    -- Write side counters
-    signal wr_chirp_count : integer range 0 to N_DOPPLER-1 := 0;
-    signal wr_sample_count : integer range 0 to N_RANGE-1 := 0;
-    signal wr_addr : integer range 0 to N_RANGE*N_DOPPLER-1 := 0;
-    signal wr_frame_complete : std_logic := '0';
+    -- =========================================================================
+    -- Write Path Signals
+    -- =========================================================================
+    signal wr_bank_sel    : std_logic := '0';  -- 0=Bank A, 1=Bank B
+    signal wr_chirp_cnt   : unsigned(6 downto 0) := (others => '0');   -- 0 to 127
+    signal wr_sample_cnt  : unsigned(9 downto 0) := (others => '0');   -- 0 to 1023
+    signal wr_en          : std_logic := '0';
+    signal s_tready_int   : std_logic := '0';
+    signal wr_frame_done  : std_logic := '0';
     
-    -- Read side counters
-    signal rd_range_bin : integer range 0 to N_RANGE-1 := 0;
-    signal rd_doppler_bin : integer range 0 to N_DOPPLER-1 := 0;
-    signal rd_addr : integer range 0 to N_RANGE*N_DOPPLER-1 := 0;
-    signal rd_frame_complete : std_logic := '0';
-    signal rd_active : std_logic := '0';
+    -- =========================================================================
+    -- Read Path Signals
+    -- =========================================================================
+    signal rd_bank_sel    : std_logic := '0';  -- 0=Bank A, 1=Bank B
+    signal rd_range_cnt   : unsigned(9 downto 0) := (others => '0');   -- 0 to 1023
+    signal rd_doppler_cnt : unsigned(6 downto 0) := (others => '0');   -- 0 to 127
+    signal rd_active      : std_logic := '0';
+    signal rd_frame_done  : std_logic := '0';
+    signal first_frame    : std_logic := '1';
     
-    -- Output pipeline
-    signal m_tdata_reg : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-    signal m_tvalid_reg : std_logic := '0';
-    signal m_tlast_reg : std_logic := '0';
+    -- Read pipeline (2-stage for BRAM latency)
+    signal rd_data_p1     : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal rd_valid_p1    : std_logic := '0';
+    signal rd_last_p1     : std_logic := '0';
+    signal rd_valid_p2    : std_logic := '0';
+    signal rd_last_p2     : std_logic := '0';
+    signal rd_data_p2     : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
     
-    -- Internal signal for tready (can't read from out port)
-    signal s_tready_int : std_logic := '0';
+    -- Output skid buffer for backpressure handling
+    signal out_valid      : std_logic := '0';
+    signal out_data       : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal out_last       : std_logic := '0';
+    signal pipe_stall     : std_logic := '0';
+    
+    -- Error detection
+    signal overflow_flag  : std_logic := '0';
 
 begin
 
-    -- Connect internal ready signal to output port
+    -- =========================================================================
+    -- Output Assignments
+    -- =========================================================================
+    -- Note: Address calculations are done inline in processes using variables
     s_axis_tready <= s_tready_int;
+    m_axis_tdata  <= out_data;
+    m_axis_tvalid <= out_valid;
+    m_axis_tlast  <= out_last;
+    frame_complete <= rd_frame_done;
+    overflow_error <= overflow_flag;
 
-    -- Write Address Calculation (row-wise: chirp*N_RANGE + sample)
-    wr_addr <= wr_chirp_count * N_RANGE + wr_sample_count;
-    
-    -- Read Address Calculation (column-wise: doppler_bin*N_RANGE + range_bin)
-    rd_addr <= rd_doppler_bin * N_RANGE + rd_range_bin;
-
-    -- ========================================================================
-    -- WRITE PROCESS: Accept Range FFT output, store row-wise
-    -- ========================================================================
-    process(aclk)
+    -- =========================================================================
+    -- WRITE PROCESS
+    -- =========================================================================
+    -- Uses variables for bank selection to avoid signal timing issues
+    -- =========================================================================
+    write_proc: process(aclk)
+        variable v_bank_sel : std_logic := '0';
+        variable v_wr_addr  : integer range 0 to MATRIX_SIZE-1;
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                wr_chirp_count <= 0;
-                wr_sample_count <= 0;
-                wr_frame_complete <= '0';
-                s_tready_int <= '0';
+                wr_chirp_cnt  <= (others => '0');
+                wr_sample_cnt <= (others => '0');
+                wr_frame_done <= '0';
+                s_tready_int  <= '0';
+                v_bank_sel    := '0';
+                wr_bank_sel   <= '0';
+                overflow_flag <= '0';
                 
             else
-                -- Always ready to accept data (assuming sufficient bandwidth)
-                s_tready_int <= '1';
-                wr_frame_complete <= '0';
+                -- Default: ready to accept (can throttle if needed)
+                s_tready_int  <= '1';
+                wr_frame_done <= '0';
+                overflow_flag <= '0';
                 
+                -- Check for overflow: write frame completing while read still active
+                if wr_frame_done = '1' and rd_active = '1' and first_frame = '0' then
+                    overflow_flag <= '1';
+                end if;
+                
+                -- Write on valid handshake
                 if s_axis_tvalid = '1' and s_tready_int = '1' then
-                    -- Write to appropriate bank (calculate address inline to avoid signal delay)
-                    if state = WRITE_A_READ_B then
-                        ram_a(wr_chirp_count * N_RANGE + wr_sample_count) <= s_axis_tdata;
+                    -- Calculate address using current counter values
+                    v_wr_addr := to_integer(wr_chirp_cnt) * N_RANGE + 
+                                 to_integer(wr_sample_cnt);
+                    
+                    -- Write to selected bank (using variable for immediate update)
+                    if v_bank_sel = '0' then
+                        ram_a(v_wr_addr) <= s_axis_tdata;
                     else
-                        ram_b(wr_chirp_count * N_RANGE + wr_sample_count) <= s_axis_tdata;
+                        ram_b(v_wr_addr) <= s_axis_tdata;
                     end if;
                     
-                    -- Advance sample counter
+                    -- Advance counters
                     if s_axis_tlast = '1' then
                         -- End of chirp
-                        wr_sample_count <= 0;
+                        wr_sample_cnt <= (others => '0');
                         
-                        if wr_chirp_count = N_DOPPLER - 1 then
-                            -- Full frame written
-                            wr_chirp_count <= 0;
-                            wr_frame_complete <= '1';
+                        if wr_chirp_cnt = N_DOPPLER - 1 then
+                            -- Frame complete - toggle bank IMMEDIATELY (variable)
+                            wr_chirp_cnt  <= (others => '0');
+                            wr_frame_done <= '1';
+                            v_bank_sel    := not v_bank_sel;
+                            wr_bank_sel   <= v_bank_sel;  -- Update signal for read side
                         else
-                            wr_chirp_count <= wr_chirp_count + 1;
+                            wr_chirp_cnt <= wr_chirp_cnt + 1;
                         end if;
                     else
-                        wr_sample_count <= wr_sample_count + 1;
+                        wr_sample_cnt <= wr_sample_cnt + 1;
                     end if;
                 end if;
             end if;
         end if;
-    end process;
+    end process write_proc;
 
-    -- ========================================================================
-    -- READ PROCESS: Read column-wise for Doppler FFT
-    -- ========================================================================
-    process(aclk)
-        variable rd_data : std_logic_vector(DATA_WIDTH-1 downto 0);
+    -- =========================================================================
+    -- READ PROCESS
+    -- =========================================================================
+    -- Column-wise read with 2-cycle BRAM latency pipeline
+    -- =========================================================================
+    read_proc: process(aclk)
+        variable v_rd_addr : integer range 0 to MATRIX_SIZE-1;
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                rd_range_bin <= 0;
-                rd_doppler_bin <= 0;
-                rd_frame_complete <= '0';
-                rd_active <= '0';
-                m_tdata_reg <= (others => '0');
-                m_tvalid_reg <= '0';
-                m_tlast_reg <= '0';
+                rd_range_cnt   <= (others => '0');
+                rd_doppler_cnt <= (others => '0');
+                rd_active      <= '0';
+                rd_frame_done  <= '0';
+                rd_bank_sel    <= '0';
+                first_frame    <= '1';
+                rd_valid_p1    <= '0';
+                rd_last_p1     <= '0';
+                rd_valid_p2    <= '0';
+                rd_last_p2     <= '0';
                 
             else
+                rd_frame_done <= '0';
+                
+                -- Pipeline stall when output is full and downstream not ready
+                pipe_stall <= out_valid and (not m_axis_tready);
+                
                 -- Start reading when write frame completes
-                if wr_frame_complete = '1' and rd_active = '0' then
-                    rd_active <= '1';
-                    rd_range_bin <= 0;
-                    rd_doppler_bin <= 0;
+                if wr_frame_done = '1' and rd_active = '0' then
+                    rd_active      <= '1';
+                    rd_range_cnt   <= (others => '0');
+                    rd_doppler_cnt <= (others => '0');
+                    rd_bank_sel    <= not wr_bank_sel;  -- Read from just-completed bank
+                    first_frame    <= '0';
                 end if;
                 
-                -- Read when active and downstream is ready
-                if rd_active = '1' and (m_tvalid_reg = '0' or m_axis_tready = '1') then
-                    -- Read from appropriate bank (calculate address inline to avoid signal delay)
-                    -- On first frame: read from Bank A (which was just filled)
-                    -- On subsequent frames: proper ping-pong operation
-                    if first_frame = '1' or state = WRITE_B_READ_A then
-                        rd_data := ram_a(rd_doppler_bin * N_RANGE + rd_range_bin);
-                    else
-                        rd_data := ram_b(rd_doppler_bin * N_RANGE + rd_range_bin);
-                    end if;
-                    
-                    m_tdata_reg <= rd_data;
-                    m_tvalid_reg <= '1';
-                    
-                    -- Generate TLAST at end of each Doppler column
-                    if rd_doppler_bin = N_DOPPLER - 1 then
-                        m_tlast_reg <= '1';
-                    else
-                        m_tlast_reg <= '0';
-                    end if;
-                    
-                    -- Advance read counters
-                    if rd_doppler_bin = N_DOPPLER - 1 then
-                        rd_doppler_bin <= 0;
+                -- Pipeline advance when not stalled
+                if pipe_stall = '0' then
+                    -- Stage 1: BRAM read
+                    if rd_active = '1' then
+                        v_rd_addr := to_integer(rd_doppler_cnt) * N_RANGE + 
+                                     to_integer(rd_range_cnt);
                         
-                        if rd_range_bin = N_RANGE - 1 then
-                            -- Full frame read
-                            rd_range_bin <= 0;
-                            rd_frame_complete <= '1';
-                            rd_active <= '0';
-                            first_frame <= '0';  -- Clear after first frame read
+                        if rd_bank_sel = '0' then
+                            rd_data_p1 <= ram_a(v_rd_addr);
                         else
-                            rd_range_bin <= rd_range_bin + 1;
+                            rd_data_p1 <= ram_b(v_rd_addr);
+                        end if;
+                        
+                        rd_valid_p1 <= '1';
+                        if rd_doppler_cnt = N_DOPPLER - 1 then
+                            rd_last_p1 <= '1';
+                        else
+                            rd_last_p1 <= '0';
+                        end if;
+                        
+                        -- Advance read counters (column-wise: doppler varies fast)
+                        if rd_doppler_cnt = N_DOPPLER - 1 then
+                            rd_doppler_cnt <= (others => '0');
+                            
+                            if rd_range_cnt = N_RANGE - 1 then
+                                -- Frame complete
+                                rd_range_cnt  <= (others => '0');
+                                rd_active     <= '0';
+                                rd_frame_done <= '1';
+                            else
+                                rd_range_cnt <= rd_range_cnt + 1;
+                            end if;
+                        else
+                            rd_doppler_cnt <= rd_doppler_cnt + 1;
                         end if;
                     else
-                        rd_doppler_bin <= rd_doppler_bin + 1;
+                        rd_valid_p1 <= '0';
+                        rd_last_p1  <= '0';
                     end if;
                     
-                elsif m_axis_tready = '1' then
-                    m_tvalid_reg <= '0';
+                    -- Stage 2: Output register
+                    rd_data_p2  <= rd_data_p1;
+                    rd_valid_p2 <= rd_valid_p1;
+                    rd_last_p2  <= rd_last_p1;
                 end if;
             end if;
         end if;
-    end process;
-    
-    -- Output assignments
-    m_axis_tdata <= m_tdata_reg;
-    m_axis_tvalid <= m_tvalid_reg;
-    m_axis_tlast <= m_tlast_reg;
+    end process read_proc;
 
-    -- ========================================================================
-    -- PING-PONG STATE MACHINE: Toggle banks when frame completes
-    -- ========================================================================
-    process(aclk)
+    -- =========================================================================
+    -- OUTPUT SKID BUFFER
+    -- =========================================================================
+    -- Handles AXI-Stream backpressure without losing data
+    -- =========================================================================
+    output_proc: process(aclk)
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                state <= WRITE_A_READ_B;
-                first_frame <= '1';
+                out_valid <= '0';
+                out_data  <= (others => '0');
+                out_last  <= '0';
             else
-                -- Toggle state when write frame completes
-                if wr_frame_complete = '1' then
-                    if state = WRITE_A_READ_B then
-                        state <= WRITE_B_READ_A;
-                    else
-                        state <= WRITE_A_READ_B;
-                    end if;
+                if m_axis_tready = '1' or out_valid = '0' then
+                    out_valid <= rd_valid_p2;
+                    out_data  <= rd_data_p2;
+                    out_last  <= rd_last_p2;
                 end if;
             end if;
         end if;
-    end process;
+    end process output_proc;
 
 end Behavioral;

@@ -1,18 +1,8 @@
 Vivado Simulator v2025.2
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-Running: C:/AMDDesignTools/2025.2/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_corner_turner_behav xil_defaultlib.tb_corner_turner -log elaborate.log 
+Running: C:/AMDDesignTools/2025.2/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip -L xpm --snapshot tb_magnitude_calc_behav xil_defaultlib.tb_magnitude_calc -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling package std.standard
-Compiling package std.textio
-Compiling package ieee.std_logic_1164
-Compiling package ieee.numeric_std
-Compiling package ieee.std_logic_textio
-Compiling architecture behavioral of entity xil_defaultlib.corner_turner [corner_turner_default]
-Compiling architecture behavioral of entity xil_defaultlib.tb_corner_turner
-Built simulation snapshot tb_corner_turner_behav
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
