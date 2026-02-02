@@ -3,73 +3,35 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
--- =============================================================================
--- Window Multiplier: Hamming Window for Spectral Leakage Reduction
--- =============================================================================
--- Applies sample-by-sample Hamming window multiplication to I/Q data
---
--- Hamming Window: w[n] = 0.54 - 0.46*cos(2*pi*n/(N-1))
--- 
--- Fixed-Point Format:
---   - Input:  16-bit signed I, 16-bit signed Q (Q15)
---   - Window: 16-bit signed coefficient (Q15, range 0 to ~1.0)
---   - Output: 16-bit signed I, 16-bit signed Q (Q15, with rounding)
---
--- Features:
---   - Proper symmetric window for linear-phase response
---   - Registered coefficient ROM for timing closure
---   - Convergent rounding to reduce DC bias
---   - Optional saturation detection
---
--- Author: Senior Radar Systems Engineer
--- =============================================================================
-
 entity window_multiplier is
     Generic (
-        DATA_WIDTH : integer := 32;    -- I/Q packed width
-        N_SAMPLES  : integer := 1024;  -- Window length (samples per chirp)
-        COEF_WIDTH : integer := 16     -- Window coefficient precision
+        DATA_WIDTH : integer := 32;
+        N_SAMPLES  : integer := 1024;
+        COEF_WIDTH : integer := 16
     );
     Port (
         aclk          : in  STD_LOGIC;
         aresetn       : in  STD_LOGIC;
-        
-        -- AXI-Stream Slave (Input)
         s_axis_tdata  : in  STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
         s_axis_tvalid : in  STD_LOGIC;
         s_axis_tready : out STD_LOGIC;
         s_axis_tlast  : in  STD_LOGIC;
-
-        -- AXI-Stream Master (Output)
         m_axis_tdata  : out STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
         m_axis_tvalid : out STD_LOGIC;
         m_axis_tready : in  STD_LOGIC;
         m_axis_tlast  : out STD_LOGIC;
-        
-        -- Status
-        saturation_flag : out STD_LOGIC  -- Asserted on overflow
+        saturation_flag : out STD_LOGIC
     );
 end window_multiplier;
 
 architecture Behavioral of window_multiplier is
 
-    -- =========================================================================
-    -- Window Coefficient ROM
-    -- =========================================================================
-    -- Pre-computed Hamming window coefficients in Q15 format
-    -- Only stores first half (symmetric window) - second half mirrors
-    -- Coefficient = round(32767 * (0.54 - 0.46*cos(2*pi*n/(N-1))))
-    -- =========================================================================
-    
-    constant ROM_SIZE : integer := N_SAMPLES / 2;  -- Symmetric window
+    constant ROM_SIZE : integer := N_SAMPLES / 2;
     type coef_rom_type is array (0 to ROM_SIZE-1) of signed(COEF_WIDTH-1 downto 0);
     
-    -- Generate Hamming window coefficients at elaboration time
-    -- For 1024-point window: coefficients 0 to 511
     function init_hamming_rom return coef_rom_type is
         variable rom : coef_rom_type;
-        variable angle : real;
-        variable coef_real : real;
+        variable angle, coef_real : real;
         variable coef_int : integer;
         constant PI : real := 3.14159265358979323846;
     begin
@@ -77,14 +39,8 @@ architecture Behavioral of window_multiplier is
             angle := 2.0 * PI * real(i) / real(N_SAMPLES - 1);
             coef_real := 0.54 - 0.46 * cos(angle);
             coef_int := integer(coef_real * 32767.0);
-            
-            -- Clamp to valid range
-            if coef_int > 32767 then
-                coef_int := 32767;
-            elsif coef_int < 0 then
-                coef_int := 0;
-            end if;
-            
+            if coef_int > 32767 then coef_int := 32767; end if;
+            if coef_int < 0 then coef_int := 0; end if;
             rom(i) := to_signed(coef_int, COEF_WIDTH);
         end loop;
         return rom;
@@ -92,102 +48,69 @@ architecture Behavioral of window_multiplier is
     
     constant HAMMING_ROM : coef_rom_type := init_hamming_rom;
     
-    -- ROM synthesis attribute for efficient implementation
     attribute rom_style : string;
     attribute rom_style of HAMMING_ROM : constant is "block";
 
-    -- =========================================================================
-    -- Pipeline Signals
-    -- =========================================================================
+    signal sample_idx : unsigned(9 downto 0) := (others => '0');
     
-    -- Sample counter for window index
-    signal sample_idx    : unsigned(9 downto 0) := (others => '0');  -- 0 to N_SAMPLES-1
+    signal s1_i, s1_q   : signed(15 downto 0) := (others => '0');
+    signal s1_coef      : signed(COEF_WIDTH-1 downto 0) := (others => '0');
+    signal s1_valid     : std_logic := '0';
+    signal s1_last      : std_logic := '0';
     
-    -- Stage 1: Input register + ROM lookup
-    signal s1_i          : signed(15 downto 0) := (others => '0');
-    signal s1_q          : signed(15 downto 0) := (others => '0');
-    signal s1_coef       : signed(COEF_WIDTH-1 downto 0) := (others => '0');
-    signal s1_valid      : std_logic := '0';
-    signal s1_last       : std_logic := '0';
+    signal s2_mult_i, s2_mult_q : signed(31 downto 0) := (others => '0');
+    signal s2_valid             : std_logic := '0';
+    signal s2_last              : std_logic := '0';
     
-    -- Stage 2: Multiplication
-    signal s2_mult_i     : signed(31 downto 0) := (others => '0');  -- 16x16 = 32 bits
-    signal s2_mult_q     : signed(31 downto 0) := (others => '0');
-    signal s2_valid      : std_logic := '0';
-    signal s2_last       : std_logic := '0';
+    signal s3_i_rounded, s3_q_rounded : signed(15 downto 0) := (others => '0');
+    signal s3_valid                   : std_logic := '0';
+    signal s3_last                    : std_logic := '0';
     
-    -- Stage 3: Rounding and output
-    signal s3_i_rounded  : signed(15 downto 0) := (others => '0');
-    signal s3_q_rounded  : signed(15 downto 0) := (others => '0');
-    signal s3_valid      : std_logic := '0';
-    signal s3_last       : std_logic := '0';
-    
-    -- Handshake
-    signal pipe_advance  : std_logic;
-    signal s_ready_int   : std_logic := '0';
-    signal sat_flag      : std_logic := '0';
+    signal pipe_advance : std_logic;
+    signal s_ready_int  : std_logic := '0';
+    signal sat_flag     : std_logic := '0';
 
 begin
 
-    -- =========================================================================
-    -- Handshake Logic
-    -- =========================================================================
     pipe_advance  <= m_axis_tready or (not s3_valid);
     s_axis_tready <= s_ready_int;
-    
-    -- =========================================================================
-    -- ROM Address Calculation (Symmetric Window) - moved inside process
-    -- =========================================================================
-    -- First half:  sample 0..(N/2-1)   -> ROM[0..(N/2-1)]
-    -- Second half: sample (N/2)..(N-1) -> ROM[(N/2-1)..0] (mirrored)
-    -- =========================================================================
 
-    -- =========================================================================
-    -- STAGE 1: Input Capture + Coefficient Lookup
-    -- =========================================================================
     stage1_proc: process(aclk)
         variable v_rom_addr : integer range 0 to ROM_SIZE-1;
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
-                s1_i      <= (others => '0');
-                s1_q      <= (others => '0');
-                s1_coef   <= (others => '0');
-                s1_valid  <= '0';
-                s1_last   <= '0';
-                sample_idx <= (others => '0');
+                s1_i        <= (others => '0');
+                s1_q        <= (others => '0');
+                s1_coef     <= (others => '0');
+                s1_valid    <= '0';
+                s1_last     <= '0';
+                sample_idx  <= (others => '0');
                 s_ready_int <= '0';
-                
             else
-                s_ready_int <= pipe_advance;  -- Ready when pipeline can advance
+                s_ready_int <= pipe_advance;
                 
                 if pipe_advance = '1' then
                     if s_axis_tvalid = '1' and s_ready_int = '1' then
-                        -- Capture I/Q data
                         s1_i <= signed(s_axis_tdata(15 downto 0));
                         s1_q <= signed(s_axis_tdata(31 downto 16));
                         
-                        -- Compute ROM address with bounds protection
+                        -- Symmetric window: mirror second half
                         if sample_idx < ROM_SIZE then
                             v_rom_addr := to_integer(sample_idx(8 downto 0));
                         else
                             v_rom_addr := N_SAMPLES - 1 - to_integer(sample_idx);
                         end if;
-                        
-                        -- Clamp to valid range (safety)
                         if v_rom_addr > ROM_SIZE - 1 then
                             v_rom_addr := ROM_SIZE - 1;
                         end if;
                         
-                        -- Lookup window coefficient
                         s1_coef <= HAMMING_ROM(v_rom_addr);
-                        
                         s1_valid <= '1';
                         s1_last  <= s_axis_tlast;
                         
-                        -- Advance sample counter
                         if s_axis_tlast = '1' then
-                            sample_idx <= (others => '0');  -- Reset at end of chirp
+                            sample_idx <= (others => '0');
                         else
                             sample_idx <= sample_idx + 1;
                         end if;
@@ -198,11 +121,8 @@ begin
                 end if;
             end if;
         end if;
-    end process stage1_proc;
+    end process;
 
-    -- =========================================================================
-    -- STAGE 2: Multiplication (DSP48)
-    -- =========================================================================
     stage2_proc: process(aclk)
     begin
         if rising_edge(aclk) then
@@ -211,30 +131,19 @@ begin
                 s2_mult_q <= (others => '0');
                 s2_valid  <= '0';
                 s2_last   <= '0';
-                
             elsif pipe_advance = '1' then
-                -- Signed multiplication: 16-bit x 16-bit = 32-bit result
                 s2_mult_i <= s1_i * s1_coef;
                 s2_mult_q <= s1_q * s1_coef;
                 s2_valid  <= s1_valid;
                 s2_last   <= s1_last;
             end if;
         end if;
-    end process stage2_proc;
+    end process;
 
-    -- =========================================================================
-    -- STAGE 3: Rounding and Output (Convergent Rounding)
-    -- =========================================================================
-    -- Q15 * Q15 = Q30, need to extract Q15 result
-    -- Shift right by 15, with rounding:
-    --   result = (mult + 16384) >> 15  (round to nearest)
-    -- Convergent rounding: round to even when exactly 0.5
-    -- =========================================================================
+    -- Q15*Q15=Q30, extract Q15 with convergent rounding
     stage3_proc: process(aclk)
-        variable i_round : signed(31 downto 0);
-        variable q_round : signed(31 downto 0);
-        variable i_shifted : signed(16 downto 0);  -- Extra bit for saturation check
-        variable q_shifted : signed(16 downto 0);
+        variable i_round, q_round     : signed(31 downto 0);
+        variable i_shifted, q_shifted : signed(16 downto 0);
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
@@ -243,17 +152,12 @@ begin
                 s3_valid     <= '0';
                 s3_last      <= '0';
                 sat_flag     <= '0';
-                
             elsif pipe_advance = '1' then
-                -- Add rounding constant (0.5 in Q15 = 16384)
                 i_round := s2_mult_i + to_signed(16384, 32);
                 q_round := s2_mult_q + to_signed(16384, 32);
-                
-                -- Shift right by 15 to get Q15 result (extract bits 30:15)
-                i_shifted := i_round(30 downto 14);  -- 17 bits for overflow check
+                i_shifted := i_round(30 downto 14);
                 q_shifted := q_round(30 downto 14);
                 
-                -- Saturation check and clamp
                 sat_flag <= '0';
                 
                 if i_shifted > 32767 then
@@ -280,11 +184,8 @@ begin
                 s3_last  <= s2_last;
             end if;
         end if;
-    end process stage3_proc;
+    end process;
 
-    -- =========================================================================
-    -- Output Assignments
-    -- =========================================================================
     m_axis_tdata(15 downto 0)  <= std_logic_vector(s3_i_rounded);
     m_axis_tdata(31 downto 16) <= std_logic_vector(s3_q_rounded);
     m_axis_tvalid              <= s3_valid;
