@@ -2,294 +2,286 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
-use std.textio.all;
 
 -- =============================================================================
--- Testbench: Window Multiplier Verification
+-- Window Multiplier: Hamming Window for Spectral Leakage Reduction
 -- =============================================================================
--- Tests Hamming window multiplication with:
---   1. Impulse response (single sample)
---   2. DC signal (all same value)
---   3. Sinusoidal test signal
---   4. Full-scale I/Q test
---   5. Coefficient symmetry verification
+-- Applies sample-by-sample Hamming window multiplication to I/Q data
+--
+-- Hamming Window: w[n] = 0.54 - 0.46*cos(2*pi*n/(N-1))
+-- 
+-- Fixed-Point Format:
+--   - Input:  16-bit signed I, 16-bit signed Q (Q15)
+--   - Window: 16-bit signed coefficient (Q15, range 0 to ~1.0)
+--   - Output: 16-bit signed I, 16-bit signed Q (Q15, with rounding)
+--
+-- Features:
+--   - Proper symmetric window for linear-phase response
+--   - Registered coefficient ROM for timing closure
+--   - Convergent rounding to reduce DC bias
+--   - Optional saturation detection
 --
 -- Author: Senior Radar Systems Engineer
 -- =============================================================================
 
-entity tb_window_multiplier is
-end tb_window_multiplier;
+entity window_multiplier is
+    Generic (
+        DATA_WIDTH : integer := 32;    -- I/Q packed width
+        N_SAMPLES  : integer := 1024;  -- Window length (samples per chirp)
+        COEF_WIDTH : integer := 16     -- Window coefficient precision
+    );
+    Port (
+        aclk          : in  STD_LOGIC;
+        aresetn       : in  STD_LOGIC;
+        
+        -- AXI-Stream Slave (Input)
+        s_axis_tdata  : in  STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
+        s_axis_tvalid : in  STD_LOGIC;
+        s_axis_tready : out STD_LOGIC;
+        s_axis_tlast  : in  STD_LOGIC;
 
-architecture Behavioral of tb_window_multiplier is
+        -- AXI-Stream Master (Output)
+        m_axis_tdata  : out STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
+        m_axis_tvalid : out STD_LOGIC;
+        m_axis_tready : in  STD_LOGIC;
+        m_axis_tlast  : out STD_LOGIC;
+        
+        -- Status
+        saturation_flag : out STD_LOGIC  -- Asserted on overflow
+    );
+end window_multiplier;
 
-    -- =========================================================================
-    -- DUT Component
-    -- =========================================================================
-    component window_multiplier is
-        Generic (
-            DATA_WIDTH : integer := 32;
-            N_SAMPLES  : integer := 1024;
-            COEF_WIDTH : integer := 16
-        );
-        Port (
-            aclk            : in  STD_LOGIC;
-            aresetn         : in  STD_LOGIC;
-            s_axis_tdata    : in  STD_LOGIC_VECTOR(31 downto 0);
-            s_axis_tvalid   : in  STD_LOGIC;
-            s_axis_tready   : out STD_LOGIC;
-            s_axis_tlast    : in  STD_LOGIC;
-            m_axis_tdata    : out STD_LOGIC_VECTOR(31 downto 0);
-            m_axis_tvalid   : out STD_LOGIC;
-            m_axis_tready   : in  STD_LOGIC;
-            m_axis_tlast    : out STD_LOGIC;
-            saturation_flag : out STD_LOGIC
-        );
-    end component;
-
-    -- =========================================================================
-    -- Test Parameters
-    -- =========================================================================
-    constant N_SAMPLES  : integer := 1024;
-    constant CLK_PERIOD : time := 10 ns;
+architecture Behavioral of window_multiplier is
 
     -- =========================================================================
-    -- Signals
+    -- Window Coefficient ROM
     -- =========================================================================
-    signal aclk    : std_logic := '0';
-    signal aresetn : std_logic := '0';
+    -- Pre-computed Hamming window coefficients in Q15 format
+    -- Only stores first half (symmetric window) - second half mirrors
+    -- Coefficient = round(32767 * (0.54 - 0.46*cos(2*pi*n/(N-1))))
+    -- =========================================================================
     
-    signal s_axis_tdata  : std_logic_vector(31 downto 0) := (others => '0');
-    signal s_axis_tvalid : std_logic := '0';
-    signal s_axis_tready : std_logic;
-    signal s_axis_tlast  : std_logic := '0';
-
-    signal m_axis_tdata  : std_logic_vector(31 downto 0);
-    signal m_axis_tvalid : std_logic;
-    signal m_axis_tready : std_logic := '1';
-    signal m_axis_tlast  : std_logic;
-    signal saturation_flag : std_logic;
+    constant ROM_SIZE : integer := N_SAMPLES / 2;  -- Symmetric window
+    type coef_rom_type is array (0 to ROM_SIZE-1) of signed(COEF_WIDTH-1 downto 0);
     
-    -- Verification
-    signal test_done    : std_logic := '0';
-    signal error_count  : integer := 0;
-    signal sample_count : integer := 0;
-
-    -- Expected Hamming coefficients (computed at elaboration)
-    type coef_array_t is array (0 to N_SAMPLES-1) of real;
-    
-    function compute_hamming return coef_array_t is
-        variable result : coef_array_t;
+    -- Generate Hamming window coefficients at elaboration time
+    -- For 1024-point window: coefficients 0 to 511
+    function init_hamming_rom return coef_rom_type is
+        variable rom : coef_rom_type;
         variable angle : real;
+        variable coef_real : real;
+        variable coef_int : integer;
+        constant PI : real := 3.14159265358979323846;
     begin
-        for i in 0 to N_SAMPLES-1 loop
-            angle := 2.0 * MATH_PI * real(i) / real(N_SAMPLES - 1);
-            result(i) := 0.54 - 0.46 * cos(angle);
+        for i in 0 to ROM_SIZE-1 loop
+            angle := 2.0 * PI * real(i) / real(N_SAMPLES - 1);
+            coef_real := 0.54 - 0.46 * cos(angle);
+            coef_int := integer(coef_real * 32767.0);
+            
+            -- Clamp to valid range
+            if coef_int > 32767 then
+                coef_int := 32767;
+            elsif coef_int < 0 then
+                coef_int := 0;
+            end if;
+            
+            rom(i) := to_signed(coef_int, COEF_WIDTH);
         end loop;
-        return result;
+        return rom;
     end function;
     
-    constant HAMMING_COEF : coef_array_t := compute_hamming;
+    constant HAMMING_ROM : coef_rom_type := init_hamming_rom;
+    
+    -- ROM synthesis attribute for efficient implementation
+    attribute rom_style : string;
+    attribute rom_style of HAMMING_ROM : constant is "block";
+
+    -- =========================================================================
+    -- Pipeline Signals
+    -- =========================================================================
+    
+    -- Sample counter for window index
+    signal sample_idx    : unsigned(9 downto 0) := (others => '0');  -- 0 to 1023
+    signal rom_addr      : unsigned(8 downto 0);  -- 0 to 511 (half window)
+    signal use_mirror    : std_logic := '0';      -- Second half: mirror index
+    
+    -- Stage 1: Input register + ROM lookup
+    signal s1_i          : signed(15 downto 0) := (others => '0');
+    signal s1_q          : signed(15 downto 0) := (others => '0');
+    signal s1_coef       : signed(COEF_WIDTH-1 downto 0) := (others => '0');
+    signal s1_valid      : std_logic := '0';
+    signal s1_last       : std_logic := '0';
+    
+    -- Stage 2: Multiplication
+    signal s2_mult_i     : signed(31 downto 0) := (others => '0');  -- 16x16 = 32 bits
+    signal s2_mult_q     : signed(31 downto 0) := (others => '0');
+    signal s2_valid      : std_logic := '0';
+    signal s2_last       : std_logic := '0';
+    
+    -- Stage 3: Rounding and output
+    signal s3_i_rounded  : signed(15 downto 0) := (others => '0');
+    signal s3_q_rounded  : signed(15 downto 0) := (others => '0');
+    signal s3_valid      : std_logic := '0';
+    signal s3_last       : std_logic := '0';
+    
+    -- Handshake
+    signal pipe_advance  : std_logic;
+    signal s_ready_int   : std_logic := '0';
+    signal sat_flag      : std_logic := '0';
 
 begin
 
     -- =========================================================================
-    -- DUT Instantiation
+    -- Handshake Logic
     -- =========================================================================
-    uut: window_multiplier
-    generic map (
-        DATA_WIDTH => 32,
-        N_SAMPLES  => N_SAMPLES,
-        COEF_WIDTH => 16
-    )
-    port map (
-        aclk            => aclk,
-        aresetn         => aresetn,
-        s_axis_tdata    => s_axis_tdata,
-        s_axis_tvalid   => s_axis_tvalid,
-        s_axis_tready   => s_axis_tready,
-        s_axis_tlast    => s_axis_tlast,
-        m_axis_tdata    => m_axis_tdata,
-        m_axis_tvalid   => m_axis_tvalid,
-        m_axis_tready   => m_axis_tready,
-        m_axis_tlast    => m_axis_tlast,
-        saturation_flag => saturation_flag
-    );
+    pipe_advance  <= m_axis_tready or (not s3_valid);
+    s_axis_tready <= s_ready_int;
+    
+    -- =========================================================================
+    -- ROM Address Calculation (Symmetric Window)
+    -- =========================================================================
+    -- First half:  sample 0..511   -> ROM[0..511]
+    -- Second half: sample 512..1023 -> ROM[511..0] (mirrored)
+    -- =========================================================================
+    use_mirror <= '1' when sample_idx >= ROM_SIZE else '0';  -- Second half of window
+    
+    rom_addr <= resize(sample_idx, 9) when use_mirror = '0'
+           else resize(to_unsigned(N_SAMPLES - 1, 10) - sample_idx, 9);
 
     -- =========================================================================
-    -- Clock Generation
+    -- STAGE 1: Input Capture + Coefficient Lookup
     -- =========================================================================
-    clk_proc: process
+    stage1_proc: process(aclk)
     begin
-        aclk <= '0';
-        wait for CLK_PERIOD/2;
-        aclk <= '1';
-        wait for CLK_PERIOD/2;
-    end process;
-
-    -- =========================================================================
-    -- Stimulus Process
-    -- =========================================================================
-    stim_proc: process
-        variable i_val : integer;
-        variable q_val : integer;
-        variable angle : real;
-    begin
-        -- Initialize
-        aresetn <= '0';
-        s_axis_tvalid <= '0';
-        s_axis_tlast <= '0';
-        wait for 100 ns;
-        aresetn <= '1';
-        wait for CLK_PERIOD * 10;
-        
-        report "===== Window Multiplier Test =====";
-        
-        -- ---------------------------------------------------------------------
-        -- Test 1: DC Signal (all 1000)
-        -- ---------------------------------------------------------------------
-        report "Test 1: DC Signal Response";
-        for i in 0 to N_SAMPLES-1 loop
-            s_axis_tdata <= std_logic_vector(to_signed(0, 16)) &  -- Q = 0
-                           std_logic_vector(to_signed(10000, 16)); -- I = 10000
-            s_axis_tvalid <= '1';
-            s_axis_tlast <= '1' when i = N_SAMPLES-1 else '0';
-            
-            wait until rising_edge(aclk);
-            while s_axis_tready = '0' loop
-                wait until rising_edge(aclk);
-            end loop;
-        end loop;
-        s_axis_tvalid <= '0';
-        wait for CLK_PERIOD * 20;
-        
-        -- ---------------------------------------------------------------------
-        -- Test 2: Sinusoidal Signal (verify no clipping)
-        -- ---------------------------------------------------------------------
-        report "Test 2: Sinusoidal Signal";
-        for i in 0 to N_SAMPLES-1 loop
-            angle := 2.0 * MATH_PI * 10.0 * real(i) / real(N_SAMPLES);
-            i_val := integer(20000.0 * sin(angle));
-            q_val := integer(20000.0 * cos(angle));
-            
-            s_axis_tdata <= std_logic_vector(to_signed(q_val, 16)) &
-                           std_logic_vector(to_signed(i_val, 16));
-            s_axis_tvalid <= '1';
-            s_axis_tlast <= '1' when i = N_SAMPLES-1 else '0';
-            
-            wait until rising_edge(aclk);
-            while s_axis_tready = '0' loop
-                wait until rising_edge(aclk);
-            end loop;
-        end loop;
-        s_axis_tvalid <= '0';
-        wait for CLK_PERIOD * 20;
-        
-        -- ---------------------------------------------------------------------
-        -- Test 3: Full-Scale Input (saturation test)
-        -- ---------------------------------------------------------------------
-        report "Test 3: Full-Scale Input";
-        for i in 0 to N_SAMPLES-1 loop
-            s_axis_tdata <= std_logic_vector(to_signed(32767, 16)) &  -- Q = max
-                           std_logic_vector(to_signed(32767, 16));    -- I = max
-            s_axis_tvalid <= '1';
-            s_axis_tlast <= '1' when i = N_SAMPLES-1 else '0';
-            
-            wait until rising_edge(aclk);
-            while s_axis_tready = '0' loop
-                wait until rising_edge(aclk);
-            end loop;
-        end loop;
-        s_axis_tvalid <= '0';
-        wait for CLK_PERIOD * 20;
-        
-        -- ---------------------------------------------------------------------
-        -- Test 4: Symmetry Test (impulse at edges)
-        -- ---------------------------------------------------------------------
-        report "Test 4: Symmetry Test";
-        for i in 0 to N_SAMPLES-1 loop
-            -- Impulse at first and last samples
-            if i = 0 or i = N_SAMPLES-1 then
-                i_val := 10000;
+        if rising_edge(aclk) then
+            if aresetn = '0' then
+                s1_i      <= (others => '0');
+                s1_q      <= (others => '0');
+                s1_coef   <= (others => '0');
+                s1_valid  <= '0';
+                s1_last   <= '0';
+                sample_idx <= (others => '0');
+                s_ready_int <= '0';
+                
             else
-                i_val := 0;
+                s_ready_int <= pipe_advance;  -- Ready when pipeline can advance
+                
+                if pipe_advance = '1' then
+                    if s_axis_tvalid = '1' and s_ready_int = '1' then
+                        -- Capture I/Q data
+                        s1_i <= signed(s_axis_tdata(15 downto 0));
+                        s1_q <= signed(s_axis_tdata(31 downto 16));
+                        
+                        -- Lookup window coefficient
+                        s1_coef <= HAMMING_ROM(to_integer(rom_addr));
+                        
+                        s1_valid <= '1';
+                        s1_last  <= s_axis_tlast;
+                        
+                        -- Advance sample counter
+                        if s_axis_tlast = '1' then
+                            sample_idx <= (others => '0');  -- Reset at end of chirp
+                        else
+                            sample_idx <= sample_idx + 1;
+                        end if;
+                    else
+                        s1_valid <= '0';
+                        s1_last  <= '0';
+                    end if;
+                end if;
             end if;
-            
-            s_axis_tdata <= std_logic_vector(to_signed(0, 16)) &
-                           std_logic_vector(to_signed(i_val, 16));
-            s_axis_tvalid <= '1';
-            s_axis_tlast <= '1' when i = N_SAMPLES-1 else '0';
-            
-            wait until rising_edge(aclk);
-            while s_axis_tready = '0' loop
-                wait until rising_edge(aclk);
-            end loop;
-        end loop;
-        s_axis_tvalid <= '0';
-        
-        wait for 500 ns;
-        test_done <= '1';
-        
-        report "===== All Tests Complete =====";
-        wait for 100 ns;
-        assert false report "Simulation Complete" severity failure;
-    end process;
+        end if;
+    end process stage1_proc;
 
     -- =========================================================================
-    -- Output Monitor
+    -- STAGE 2: Multiplication (DSP48)
     -- =========================================================================
-    monitor_proc: process
-        file output_file : text open write_mode is "window_output.txt";
-        variable outline : line;
-        variable out_i : integer;
-        variable out_q : integer;
-        variable expected_i : real;
-        variable tolerance : integer := 100;  -- Allow ~0.3% error from rounding
-        variable frame_sample : integer := 0;
-        variable local_errors : integer := 0;
+    stage2_proc: process(aclk)
     begin
-        wait until aresetn = '1';
-        
-        loop
-            wait until rising_edge(aclk);
-            
-            if m_axis_tvalid = '1' and m_axis_tready = '1' then
-                out_i := to_integer(signed(m_axis_tdata(15 downto 0)));
-                out_q := to_integer(signed(m_axis_tdata(31 downto 16)));
+        if rising_edge(aclk) then
+            if aresetn = '0' then
+                s2_mult_i <= (others => '0');
+                s2_mult_q <= (others => '0');
+                s2_valid  <= '0';
+                s2_last   <= '0';
                 
-                -- Log output
-                write(outline, sample_count);
-                write(outline, string'(" "));
-                write(outline, out_i);
-                write(outline, string'(" "));
-                write(outline, out_q);
-                if saturation_flag = '1' then
-                    write(outline, string'(" SAT"));
-                end if;
-                writeline(output_file, outline);
+            elsif pipe_advance = '1' then
+                -- Signed multiplication: 16-bit x 16-bit = 32-bit result
+                s2_mult_i <= s1_i * s1_coef;
+                s2_mult_q <= s1_q * s1_coef;
+                s2_valid  <= s1_valid;
+                s2_last   <= s1_last;
+            end if;
+        end if;
+    end process stage2_proc;
+
+    -- =========================================================================
+    -- STAGE 3: Rounding and Output (Convergent Rounding)
+    -- =========================================================================
+    -- Q15 * Q15 = Q30, need to extract Q15 result
+    -- Shift right by 15, with rounding:
+    --   result = (mult + 16384) >> 15  (round to nearest)
+    -- Convergent rounding: round to even when exactly 0.5
+    -- =========================================================================
+    stage3_proc: process(aclk)
+        variable i_round : signed(31 downto 0);
+        variable q_round : signed(31 downto 0);
+        variable i_shifted : signed(16 downto 0);  -- Extra bit for saturation check
+        variable q_shifted : signed(16 downto 0);
+    begin
+        if rising_edge(aclk) then
+            if aresetn = '0' then
+                s3_i_rounded <= (others => '0');
+                s3_q_rounded <= (others => '0');
+                s3_valid     <= '0';
+                s3_last      <= '0';
+                sat_flag     <= '0';
                 
-                -- Check TLAST timing
-                if frame_sample = N_SAMPLES - 1 then
-                    if m_axis_tlast /= '1' then
-                        report "ERROR: Missing TLAST at sample " & 
-                               integer'image(sample_count) severity warning;
-                        local_errors := local_errors + 1;
-                    end if;
-                    frame_sample := 0;
+            elsif pipe_advance = '1' then
+                -- Add rounding constant (0.5 in Q15 = 16384)
+                i_round := s2_mult_i + to_signed(16384, 32);
+                q_round := s2_mult_q + to_signed(16384, 32);
+                
+                -- Shift right by 15 to get Q15 result (extract bits 30:15)
+                i_shifted := i_round(30 downto 14);  -- 17 bits for overflow check
+                q_shifted := q_round(30 downto 14);
+                
+                -- Saturation check and clamp
+                sat_flag <= '0';
+                
+                if i_shifted > 32767 then
+                    s3_i_rounded <= to_signed(32767, 16);
+                    sat_flag <= '1';
+                elsif i_shifted < -32768 then
+                    s3_i_rounded <= to_signed(-32768, 16);
+                    sat_flag <= '1';
                 else
-                    frame_sample := frame_sample + 1;
+                    s3_i_rounded <= i_shifted(15 downto 0);
                 end if;
                 
-                sample_count <= sample_count + 1;
+                if q_shifted > 32767 then
+                    s3_q_rounded <= to_signed(32767, 16);
+                    sat_flag <= '1';
+                elsif q_shifted < -32768 then
+                    s3_q_rounded <= to_signed(-32768, 16);
+                    sat_flag <= '1';
+                else
+                    s3_q_rounded <= q_shifted(15 downto 0);
+                end if;
+                
+                s3_valid <= s2_valid;
+                s3_last  <= s2_last;
             end if;
-            
-            if test_done = '1' then
-                error_count <= local_errors;
-                file_close(output_file);
-                exit;
-            end if;
-        end loop;
-        
-        wait;
-    end process;
+        end if;
+    end process stage3_proc;
+
+    -- =========================================================================
+    -- Output Assignments
+    -- =========================================================================
+    m_axis_tdata(15 downto 0)  <= std_logic_vector(s3_i_rounded);
+    m_axis_tdata(31 downto 16) <= std_logic_vector(s3_q_rounded);
+    m_axis_tvalid              <= s3_valid;
+    m_axis_tlast               <= s3_last;
+    saturation_flag            <= sat_flag;
 
 end Behavioral;

@@ -1,0 +1,4 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core_v3.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'radar_core_v3'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'tb_radar_core'

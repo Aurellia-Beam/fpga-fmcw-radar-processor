@@ -101,9 +101,7 @@ architecture Behavioral of window_multiplier is
     -- =========================================================================
     
     -- Sample counter for window index
-    signal sample_idx    : unsigned(9 downto 0) := (others => '0');  -- 0 to 1023
-    signal rom_addr      : unsigned(8 downto 0);  -- 0 to 511 (half window)
-    signal use_mirror    : std_logic := '0';      -- Second half: mirror index
+    signal sample_idx    : unsigned(9 downto 0) := (others => '0');  -- 0 to N_SAMPLES-1
     
     -- Stage 1: Input register + ROM lookup
     signal s1_i          : signed(15 downto 0) := (others => '0');
@@ -138,20 +136,17 @@ begin
     s_axis_tready <= s_ready_int;
     
     -- =========================================================================
-    -- ROM Address Calculation (Symmetric Window)
+    -- ROM Address Calculation (Symmetric Window) - moved inside process
     -- =========================================================================
-    -- First half:  sample 0..511   -> ROM[0..511]
-    -- Second half: sample 512..1023 -> ROM[511..0] (mirrored)
+    -- First half:  sample 0..(N/2-1)   -> ROM[0..(N/2-1)]
+    -- Second half: sample (N/2)..(N-1) -> ROM[(N/2-1)..0] (mirrored)
     -- =========================================================================
-    use_mirror <= sample_idx(9);  -- MSB indicates second half
-    
-    rom_addr <= sample_idx(8 downto 0) when use_mirror = '0'
-           else to_unsigned(N_SAMPLES - 1, 10)(8 downto 0) - sample_idx(8 downto 0);
 
     -- =========================================================================
     -- STAGE 1: Input Capture + Coefficient Lookup
     -- =========================================================================
     stage1_proc: process(aclk)
+        variable v_rom_addr : integer range 0 to ROM_SIZE-1;
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
@@ -172,8 +167,20 @@ begin
                         s1_i <= signed(s_axis_tdata(15 downto 0));
                         s1_q <= signed(s_axis_tdata(31 downto 16));
                         
+                        -- Compute ROM address with bounds protection
+                        if sample_idx < ROM_SIZE then
+                            v_rom_addr := to_integer(sample_idx(8 downto 0));
+                        else
+                            v_rom_addr := N_SAMPLES - 1 - to_integer(sample_idx);
+                        end if;
+                        
+                        -- Clamp to valid range (safety)
+                        if v_rom_addr > ROM_SIZE - 1 then
+                            v_rom_addr := ROM_SIZE - 1;
+                        end if;
+                        
                         -- Lookup window coefficient
-                        s1_coef <= HAMMING_ROM(to_integer(rom_addr));
+                        s1_coef <= HAMMING_ROM(v_rom_addr);
                         
                         s1_valid <= '1';
                         s1_last  <= s_axis_tlast;

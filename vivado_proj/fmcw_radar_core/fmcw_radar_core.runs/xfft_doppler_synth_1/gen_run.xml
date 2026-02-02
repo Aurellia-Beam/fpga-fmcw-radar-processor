@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="xfft_doppler_synth_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1770011222">
-  <File Type="PA-TCL" Name="xfft_doppler.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="xfft_doppler_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="xfft_doppler_reports.tcl"/>
-  <File Type="RDS-RDS" Name="xfft_doppler.vds"/>
   <File Type="RDS-UTIL" Name="xfft_doppler_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="xfft_doppler_utilization_synth.pb"/>
+  <File Type="PA-TCL" Name="xfft_doppler.tcl"/>
+  <File Type="RDS-RDS" Name="xfft_doppler.vds"/>
   <File Type="RDS-DCP" Name="xfft_doppler.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="xfft_doppler_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="xfft_doppler_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/xfft_doppler" RelGenDir="$PGENDIR/xfft_doppler">
     <File Path="$PSRCDIR/sources_1/ip/xfft_doppler/xfft_doppler.xci">
       <FileInfo>
@@ -42,9 +39,7 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025">
-      <Desc>Vivado Synthesis Defaults</Desc>
-    </StratHandle>
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025"/>
     <Step Id="synth_design"/>
   </Strategy>
 </GenRun>

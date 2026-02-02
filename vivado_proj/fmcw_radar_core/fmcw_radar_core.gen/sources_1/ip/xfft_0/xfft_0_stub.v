@@ -2,10 +2,10 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (win64) Build 6299465 Fri Nov 14 19:35:11 GMT 2025
-// Date        : Sat Jan 31 22:14:26 2026
+// Date        : Mon Feb  2 04:19:57 2026
 // Host        : SchoolLaptop running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub -rename_top xfft_0 -prefix
-//               xfft_0_ xfft_0_stub.v
+// Command     : write_verilog -force -mode synth_stub
+//               c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0/xfft_0_stub.v
 // Design      : xfft_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7a35ticsg324-1L
@@ -14,7 +14,7 @@
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* CHECK_LICENSE_TYPE = "xfft_0,xfft_v9_1_15,{}" *) (* core_generation_info = "xfft_0,xfft_v9_1_15,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xfft,x_ipVersion=9.1,x_ipCoreRevision=15,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_XDEVICEFAMILY=artix7,C_PART=xc7a35ticsg324-1L,C_S_AXIS_CONFIG_TDATA_WIDTH=8,C_S_AXIS_DATA_TDATA_WIDTH=32,C_M_AXIS_DATA_TDATA_WIDTH=32,C_M_AXIS_DATA_TUSER_WIDTH=8,C_M_AXIS_STATUS_TDATA_WIDTH=8,C_THROTTLE_SCHEME=1,C_NSSR=1,C_CHANNELS=1,C_NFFT_MAX=10,C_ARCH=1,C_HAS_NFFT=0,C_USE_FLT_PT=0,C_INPUT_WIDTH=16,C_TWIDDLE_WIDTH=16,C_OUTPUT_WIDTH=16,C_HAS_SCALING=1,C_HAS_BFP=1,C_HAS_ROUNDING=0,C_HAS_ACLKEN=0,C_HAS_ARESETN=0,C_HAS_OVFLO=0,C_HAS_NATURAL_INPUT=1,C_HAS_NATURAL_OUTPUT=1,C_HAS_CYCLIC_PREFIX=0,C_HAS_XK_INDEX=0,C_DATA_MEM_TYPE=1,C_TWIDDLE_MEM_TYPE=1,C_BRAM_STAGES=0,C_REORDER_MEM_TYPE=1,C_USE_HYBRID_RAM=0,C_OPTIMIZE_GOAL=0,C_CMPY_TYPE=1,C_BFLY_TYPE=0,C_SYSTOLICFFT_INV=0,C_IS_BLOCKING_RUNTIME_CONF=0}" *) (* downgradeipidentifiedwarnings = "yes" *) 
+(* CHECK_LICENSE_TYPE = "xfft_0,xfft_v9_1_15,{}" *) (* core_generation_info = "xfft_0,xfft_v9_1_15,{x_ipProduct=Vivado 2025.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xfft,x_ipVersion=9.1,x_ipCoreRevision=15,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_XDEVICEFAMILY=artix7,C_PART=xc7a35ticsg324-1L,C_S_AXIS_CONFIG_TDATA_WIDTH=8,C_S_AXIS_DATA_TDATA_WIDTH=32,C_M_AXIS_DATA_TDATA_WIDTH=32,C_M_AXIS_DATA_TUSER_WIDTH=8,C_M_AXIS_STATUS_TDATA_WIDTH=8,C_THROTTLE_SCHEME=1,C_NSSR=1,C_CHANNELS=1,C_NFFT_MAX=10,C_ARCH=3,C_HAS_NFFT=0,C_USE_FLT_PT=0,C_INPUT_WIDTH=16,C_TWIDDLE_WIDTH=16,C_OUTPUT_WIDTH=16,C_HAS_SCALING=1,C_HAS_BFP=1,C_HAS_ROUNDING=0,C_HAS_ACLKEN=0,C_HAS_ARESETN=0,C_HAS_OVFLO=0,C_HAS_NATURAL_INPUT=1,C_HAS_NATURAL_OUTPUT=1,C_HAS_CYCLIC_PREFIX=0,C_HAS_XK_INDEX=0,C_DATA_MEM_TYPE=1,C_TWIDDLE_MEM_TYPE=1,C_BRAM_STAGES=3,C_REORDER_MEM_TYPE=1,C_USE_HYBRID_RAM=0,C_OPTIMIZE_GOAL=0,C_CMPY_TYPE=1,C_BFLY_TYPE=1,C_SYSTOLICFFT_INV=0,C_IS_BLOCKING_RUNTIME_CONF=0}" *) (* downgradeipidentifiedwarnings = "yes" *) 
 (* x_core_info = "xfft_v9_1_15,Vivado 2025.2" *) 
 module xfft_0(aclk, s_axis_config_tdata, 
   s_axis_config_tvalid, s_axis_config_tready, s_axis_data_tdata, s_axis_data_tvalid, 

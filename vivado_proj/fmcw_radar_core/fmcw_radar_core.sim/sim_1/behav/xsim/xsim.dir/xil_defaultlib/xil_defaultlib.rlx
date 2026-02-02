@@ -2,5 +2,10 @@
 2020.2
 Nov 14 2025
 19:37:27
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd,1770010977,vhdl2008,,,,magnitude_calc,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd,1770010977,vhdl2008,,,,tb_magnitude_calc,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd,1770025904,vhdl2008,,,,corner_turner,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd,1770025911,vhdl2008,,,,magnitude_calc,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core_v3.vhd,1770027825,vhdl2008,,,,radar_core_v3,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd,1770027838,vhdl2008,,,,tb_radar_core,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd,1770025917,vhdl2008,,,,window_multiplier,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0/sim/xfft_0.vhd,1770018630,vhdl,,,,xfft_0,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler/sim/xfft_doppler.vhd,1770011221,vhdl,,,,xfft_doppler,,,,,,,,

@@ -215,7 +215,7 @@ BEGIN
       C_NSSR => 1,
       C_CHANNELS => 1,
       C_NFFT_MAX => 10,
-      C_ARCH => 1,
+      C_ARCH => 3,
       C_HAS_NFFT => 0,
       C_USE_FLT_PT => 0,
       C_INPUT_WIDTH => 16,
@@ -233,12 +233,12 @@ BEGIN
       C_HAS_XK_INDEX => 0,
       C_DATA_MEM_TYPE => 1,
       C_TWIDDLE_MEM_TYPE => 1,
-      C_BRAM_STAGES => 0,
+      C_BRAM_STAGES => 3,
       C_REORDER_MEM_TYPE => 1,
       C_USE_HYBRID_RAM => 0,
       C_OPTIMIZE_GOAL => 0,
       C_CMPY_TYPE => 1,
-      C_BFLY_TYPE => 0,
+      C_BFLY_TYPE => 1,
       C_SYSTOLICFFT_INV => 0,
       C_IS_BLOCKING_RUNTIME_CONF => 0
     )

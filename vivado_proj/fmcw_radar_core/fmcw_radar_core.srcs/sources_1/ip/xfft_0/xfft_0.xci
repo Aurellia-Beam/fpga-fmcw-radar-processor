@@ -11,7 +11,7 @@
         "channels": [ { "value": "1", "resolve_type": "user", "usage": "all" } ],
         "transform_length": [ { "value": "1024", "resolve_type": "user", "usage": "all" } ],
         "target_clock_frequency": [ { "value": "100", "value_src": "user", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "implementation_options": [ { "value": "radix_4_burst_io", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
+        "implementation_options": [ { "value": "pipelined_streaming_io", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
         "target_data_throughput": [ { "value": "50", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "run_time_configurable_transform_length": [ { "value": "false", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "data_format": [ { "value": "fixed_point", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
@@ -29,10 +29,10 @@
         "memory_options_data": [ { "value": "block_ram", "resolve_type": "user", "usage": "all" } ],
         "memory_options_phase_factors": [ { "value": "block_ram", "resolve_type": "user", "usage": "all" } ],
         "memory_options_reorder": [ { "value": "block_ram", "resolve_type": "user", "usage": "all" } ],
-        "number_of_stages_using_block_ram_for_data_and_phase_factors": [ { "value": "0", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
+        "number_of_stages_using_block_ram_for_data_and_phase_factors": [ { "value": "3", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
         "memory_options_hybrid": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "complex_mult_type": [ { "value": "use_mults_resources", "resolve_type": "user", "usage": "all" } ],
-        "butterfly_type": [ { "value": "use_luts", "resolve_type": "user", "usage": "all" } ],
+        "butterfly_type": [ { "value": "use_xtremedsp_slices", "value_src": "user", "resolve_type": "user", "usage": "all" } ],
         "super_sample_rates": [ { "value": "1", "resolve_type": "user", "usage": "all" } ],
         "systolicfft_inv": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "blocking_run_time_configuration": [ { "value": "false", "resolve_type": "user", "format": "bool", "enabled": false, "usage": "all" } ]
@@ -49,7 +49,7 @@
         "C_NSSR": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_CHANNELS": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_NFFT_MAX": [ { "value": "10", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_ARCH": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_ARCH": [ { "value": "3", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_HAS_NFFT": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_USE_FLT_PT": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_INPUT_WIDTH": [ { "value": "16", "resolve_type": "generated", "format": "long", "usage": "all" } ],
@@ -67,12 +67,12 @@
         "C_HAS_XK_INDEX": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_DATA_MEM_TYPE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_TWIDDLE_MEM_TYPE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_BRAM_STAGES": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_BRAM_STAGES": [ { "value": "3", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_REORDER_MEM_TYPE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_USE_HYBRID_RAM": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_OPTIMIZE_GOAL": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_CMPY_TYPE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "C_BFLY_TYPE": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "C_BFLY_TYPE": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_SYSTOLICFFT_INV": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "C_IS_BLOCKING_RUNTIME_CONF": [ { "value": "0", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
@@ -349,5 +349,5 @@
       }
     }
   },
-  "checksum": "62ed1a1e"
+  "checksum": "041c5de4"
 }

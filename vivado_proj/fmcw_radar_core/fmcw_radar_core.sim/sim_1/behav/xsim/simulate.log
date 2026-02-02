@@ -1,50 +1,33 @@
 Time resolution is 1 ps
-Note: ===== Magnitude Calculator Test =====
-Time: 150 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 1: Pure I component
-Time: 150 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 2: Pure Q component
-Time: 345 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 3: 45-degree angle (I=Q)
-Time: 535 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 4: Full rotation sweep
-Time: 725 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 50: Approx magnitude = 10676
-Time: 945 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: ===== Magnitude Calculator Test =====
-Time: 150 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 1: Pure I component
-Time: 150 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 2: Pure Q component
-Time: 345 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 3: 45-degree angle (I=Q)
-Time: 535 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 4: Full rotation sweep
-Time: 725 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 50: Approx magnitude = 10676
-Time: 945 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 100: Approx magnitude = 10680
-Time: 1445 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 150: Approx magnitude = 10564
-Time: 1945 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 200: Approx magnitude = 10531
-Time: 2445 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 250: Approx magnitude = 10130
-Time: 2945 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 300: Approx magnitude = 10062
-Time: 3445 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 350: Approx magnitude = 10007
-Time: 3945 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Test 5: Various magnitudes
-Time: 4315 ns  Iteration: 1  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Sample 400: Approx magnitude = 15748
-Time: 4445 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: ===== Test Complete =====
-Time: 4715 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Max observed error: Check monitor output
-Time: 4715 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Note: Total samples processed: 410
-Time: 4715 ns  Iteration: 1  Process: /tb_magnitude_calc/monitor_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-Failure: Simulation Finished
-Time: 4815 ns  Iteration: 0  Process: /tb_magnitude_calc/stim_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd
-$finish called at time : 4815 ns : File "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_magnitude_calc.vhd" Line 171
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - C_CHANNELS  = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - field_width = 8
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - Copying SCALE_SCH from 8 downto 1 to 8 downto 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note: Waiting for core readiness (s_axis_tready = '1')...
+Time: 25 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: Core ready. Starting data transmission.
+Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: === Generating CPI 0 ===
+Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - C_CHANNELS  = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:     - field_width = 8
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - Copying SCALE_SCH from 8 downto 1 to 8 downto 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_doppler_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note:   - SCALING_SCH: in_ptr = 1, out_ptr = 1
+Time: 0 ps  Iteration: 0  Process: /tb_radar_core/uut/u_range_fft/U0/i_synth/axi_wrapper/gen_config_fifo_in/line__94240  File: C:/AMDDesignTools/2025.2/Vivado/data/ip/xilinx/xfft_v9_1/hdl/xfft_v9_1_vh_rfs.vhd
+Note: Waiting for core readiness (s_axis_tready = '1')...
+Time: 25 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: Core ready. Starting data transmission.
+Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
+Note: === Generating CPI 0 ===
+Time: 65 ns  Iteration: 1  Process: /tb_radar_core/stimulus_proc  File: C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd
