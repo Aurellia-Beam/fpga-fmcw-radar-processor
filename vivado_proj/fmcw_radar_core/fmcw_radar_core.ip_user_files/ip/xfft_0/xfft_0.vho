@@ -55,7 +55,7 @@ COMPONENT xfft_0
   PORT (
     aclk : IN STD_LOGIC;
     aresetn : IN STD_LOGIC;
-    s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    s_axis_config_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     s_axis_config_tvalid : IN STD_LOGIC;
     s_axis_config_tready : OUT STD_LOGIC;
     s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -63,9 +63,13 @@ COMPONENT xfft_0
     s_axis_data_tready : OUT STD_LOGIC;
     s_axis_data_tlast : IN STD_LOGIC;
     m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     m_axis_data_tvalid : OUT STD_LOGIC;
     m_axis_data_tready : IN STD_LOGIC;
     m_axis_data_tlast : OUT STD_LOGIC;
+    m_axis_status_tdata : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    m_axis_status_tvalid : OUT STD_LOGIC;
+    m_axis_status_tready : IN STD_LOGIC;
     event_frame_started : OUT STD_LOGIC;
     event_tlast_unexpected : OUT STD_LOGIC;
     event_tlast_missing : OUT STD_LOGIC;
@@ -92,9 +96,13 @@ your_instance_name : xfft_0
     s_axis_data_tready => s_axis_data_tready,
     s_axis_data_tlast => s_axis_data_tlast,
     m_axis_data_tdata => m_axis_data_tdata,
+    m_axis_data_tuser => m_axis_data_tuser,
     m_axis_data_tvalid => m_axis_data_tvalid,
     m_axis_data_tready => m_axis_data_tready,
     m_axis_data_tlast => m_axis_data_tlast,
+    m_axis_status_tdata => m_axis_status_tdata,
+    m_axis_status_tvalid => m_axis_status_tvalid,
+    m_axis_status_tready => m_axis_status_tready,
     event_frame_started => event_frame_started,
     event_tlast_unexpected => event_tlast_unexpected,
     event_tlast_missing => event_tlast_missing,

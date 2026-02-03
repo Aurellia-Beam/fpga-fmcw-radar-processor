@@ -1,0 +1,17 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/sim/xfft_doppler.vhd" \
+"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_0_1/sim/xfft_0.vhd" \
+"../../../../../../rtl/src/os_cfar.vhd" \
+
+vhdl2008 xil_defaultlib  \
+"../../../../../../rtl/src/corner_turner.vhd" \
+"../../../../../../rtl/src/magnitude_calc.vhd" \
+"../../../../../../rtl/src/radar_core_v3.vhd" \
+"../../../../../../rtl/src/window_multiplier.vhd" \
+
+vhdl xil_defaultlib  \
+"../../../../../../rtl/src/tb_full_suite.vhd" \
+
+# Do not sort compile order
+nosort

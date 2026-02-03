@@ -57,13 +57,17 @@ module xfft_doppler_sv (
   (* X_INTERFACE_MODE = "slave S_AXIS_DATA" *)
   (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME S_AXIS_DATA, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
   vivado_axis_v1_0.slave S_AXIS_DATA,
+  (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS_STATUS" *)
+  (* X_INTERFACE_MODE = "master M_AXIS_STATUS" *)
+  (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME M_AXIS_STATUS, TDATA_NUM_BYTES 1, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
+  vivado_axis_v1_0.master M_AXIS_STATUS,
   (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS_DATA" *)
   (* X_INTERFACE_MODE = "master M_AXIS_DATA" *)
-  (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME M_AXIS_DATA, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
+  (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME M_AXIS_DATA, TDATA_NUM_BYTES 4, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 8, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 1, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
   vivado_axis_v1_0.master M_AXIS_DATA,
   (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 S_AXIS_CONFIG" *)
   (* X_INTERFACE_MODE = "slave S_AXIS_CONFIG" *)
-  (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME S_AXIS_CONFIG, TDATA_NUM_BYTES 2, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
+  (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME S_AXIS_CONFIG, TDATA_NUM_BYTES 1, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 100000000, PHASE 0.0, LAYERED_METADATA undef, INSERT_VIP 0" *)
   vivado_axis_v1_0.slave S_AXIS_CONFIG,
   (* X_INTERFACE_IGNORE = "true" *)
   input wire aclk,
@@ -84,11 +88,16 @@ module xfft_doppler_sv (
 );
 
   // interface wire assignments
+  assign M_AXIS_STATUS.TDEST = 0;
+  assign M_AXIS_STATUS.TID = 0;
+  assign M_AXIS_STATUS.TKEEP = 0;
+  assign M_AXIS_STATUS.TLAST = 0;
+  assign M_AXIS_STATUS.TSTRB = 0;
+  assign M_AXIS_STATUS.TUSER = 0;
   assign M_AXIS_DATA.TDEST = 0;
   assign M_AXIS_DATA.TID = 0;
   assign M_AXIS_DATA.TKEEP = 0;
   assign M_AXIS_DATA.TSTRB = 0;
-  assign M_AXIS_DATA.TUSER = 0;
 
   xfft_doppler inst (
     .aclk(aclk),
@@ -101,9 +110,13 @@ module xfft_doppler_sv (
     .s_axis_data_tready(S_AXIS_DATA.TREADY),
     .s_axis_data_tlast(S_AXIS_DATA.TLAST),
     .m_axis_data_tdata(M_AXIS_DATA.TDATA),
+    .m_axis_data_tuser(M_AXIS_DATA.TUSER),
     .m_axis_data_tvalid(M_AXIS_DATA.TVALID),
     .m_axis_data_tready(M_AXIS_DATA.TREADY),
     .m_axis_data_tlast(M_AXIS_DATA.TLAST),
+    .m_axis_status_tdata(M_AXIS_STATUS.TDATA),
+    .m_axis_status_tvalid(M_AXIS_STATUS.TVALID),
+    .m_axis_status_tready(M_AXIS_STATUS.TREADY),
     .event_frame_started(event_frame_started),
     .event_tlast_unexpected(event_tlast_unexpected),
     .event_tlast_missing(event_tlast_missing),

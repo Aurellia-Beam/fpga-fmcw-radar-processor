@@ -98,7 +98,7 @@ begin
         wait until s_axis_tready = '1' and rising_edge(aclk);
         report "Core ready.";
         
-        for cpi in 0 to 0 loop
+        for cpi in 0 to 1 loop
             report "CPI " & integer'image(cpi);
             
             for chirp_num in 0 to N_DOPPLER-1 loop

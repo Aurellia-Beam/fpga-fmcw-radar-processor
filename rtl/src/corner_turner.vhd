@@ -116,7 +116,7 @@ begin
                         if wr_chirp = N_DOPPLER - 1 then
                             wr_chirp      <= (others => '0');
                             wr_frame_done <= '1';
-                            wr_bank_sel   <= wr_bank_sel;
+                            wr_bank_sel   <= not wr_bank_sel;
                         else
                             wr_chirp <= wr_chirp + 1;
                         end if;
@@ -150,7 +150,7 @@ begin
                     rd_active    <= '1';
                     rd_range     <= (others => '0');
                     rd_doppler   <= (others => '0');
-                    rd_bank_sel  <= not wr_bank_sel;
+                    rd_bank_sel  <= not wr_bank_sel;  -- Read from just-filled bank (after toggle)
                     first_frame  <= '0';
                 end if;
                 

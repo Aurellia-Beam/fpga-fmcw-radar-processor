@@ -1,79 +1,56 @@
-#!/usr/bin/env python3
-"""Visualize FMCW Radar Range-Doppler Map from simulation output."""
-
-import numpy as np
 import matplotlib.pyplot as plt
-from pathlib import Path
+import numpy as np
 
-# Parameters from testbench
+# Configuration
 N_RANGE = 1024
 N_DOPPLER = 128
-TARGET_1 = (100, 5)    # (range_bin, doppler_bin)
-TARGET_2 = (500, -10)  # Note: -10 wraps to 118 in unsigned (128-10)
+FILENAME = "radar_heatmap_data.txt"
 
-def load_rdm(filepath):
-    """Load radar output: range doppler magnitude"""
-    data = np.loadtxt(filepath, dtype=int)
-    rdm = np.zeros((N_RANGE, N_DOPPLER))
-    for row in data:
-        r, d, mag = row[0], row[1], row[2]
-        if 0 <= r < N_RANGE and 0 <= d < N_DOPPLER:
-            rdm[r, d] = mag
-    return rdm
+def parse_radar_data():
+    print(f"Reading {FILENAME}...")
+    
+    # We will accumulate frames. 
+    # Since the simulation runs 4 frames, we can sum them or just show the last one.
+    # Let's show the 'Max Hold' map (accumulated detections).
+    rd_map = np.zeros((N_RANGE, N_DOPPLER))
+    
+    try:
+        with open(FILENAME, 'r') as f:
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) < 3: continue
+                
+                r_idx = int(parts[0])
+                d_idx = int(parts[1])
+                mag   = int(parts[2])
+                
+                # Update map
+                if r_idx < N_RANGE and d_idx < N_DOPPLER:
+                    # Because the file contains multiple frames, we just overwrite 
+                    # or max-hold. Let's use max-hold to see all targets from all frames.
+                    rd_map[r_idx, d_idx] = max(rd_map[r_idx, d_idx], mag)
+                    
+    except FileNotFoundError:
+        print(f"Error: Could not find {FILENAME}. Run the Vivado simulation first!")
+        return None
 
-def plot_rdm(rdm):
-    """Plot Range-Doppler Map with expected target markers."""
-    plt.figure(figsize=(12, 8))
+    return rd_map
+
+def plot_map(rd_map):
+    plt.figure(figsize=(10, 8))
     
-    # Convert to dB (avoid log(0))
-    rdm_db = 20 * np.log10(rdm + 1)
+    # Use 'hot' colormap for radar look. Origin='lower' flips it to normal graph coordinates
+    plt.imshow(rd_map, aspect='auto', cmap='inferno', origin='lower')
     
-    # Shift Doppler axis so 0 is centered
-    rdm_shifted = np.fft.fftshift(rdm_db, axes=1)
-    doppler_axis = np.arange(N_DOPPLER) - N_DOPPLER // 2
+    plt.title(f"OS-CFAR Range-Doppler Map (Max Hold)\nSize: {N_RANGE}x{N_DOPPLER}")
+    plt.xlabel("Doppler Bin")
+    plt.ylabel("Range Bin")
+    plt.colorbar(label="Detection Magnitude (CFAR Output)")
     
-    plt.imshow(rdm_shifted.T, aspect='auto', origin='lower',
-               extent=[0, N_RANGE, -N_DOPPLER//2, N_DOPPLER//2],
-               cmap='viridis')
-    plt.colorbar(label='Magnitude (dB)')
-    
-    
-    plt.xlabel('Range Bin')
-    plt.ylabel('Doppler Bin')
-    plt.title('FMCW Radar Range-Doppler Map')
-    plt.tight_layout()
-    plt.savefig('rdm_plot.png', dpi=150)
+    print("Displaying plot...")
     plt.show()
-    print("Saved: rdm_plot.png")
-
-def analyze_peaks(rdm, n_peaks=5):
-    """Find and report top magnitude peaks."""
-    flat_idx = np.argsort(rdm.flatten())[-n_peaks:][::-1]
-    print(f"\nTop {n_peaks} detections:")
-    print(f"{'Range':>8} {'Doppler':>8} {'Magnitude':>12}")
-    print("-" * 30)
-    for idx in flat_idx:
-        r, d = np.unravel_index(idx, rdm.shape)
-        # Convert Doppler to signed
-        d_signed = d if d < N_DOPPLER // 2 else d - N_DOPPLER
-        print(f"{r:>8} {d_signed:>8} {rdm[r, d]:>12.0f}")
 
 if __name__ == "__main__":
-    # Try common locations for output file
-    paths = ["radar_output.txt", "C:/radar_output.txt", "./radar_output.txt"]
-    
-    rdm = None
-    for p in paths:
-        if Path(p).exists():
-            print(f"Loading: {p}")
-            rdm = load_rdm(p)
-            break
-    
-    if rdm is None:
-        print("ERROR: radar_output.txt not found. Run simulation first.")
-        print("Expected format: range_idx doppler_idx magnitude (space-separated)")
-        exit(1)
-    
-    print(f"Loaded RDM: {rdm.shape}, max={rdm.max():.0f}, nonzero={np.count_nonzero(rdm)}")
-    analyze_peaks(rdm)
-    plot_rdm(rdm)
+    data = parse_radar_data()
+    if data is not None:
+        plot_map(data)

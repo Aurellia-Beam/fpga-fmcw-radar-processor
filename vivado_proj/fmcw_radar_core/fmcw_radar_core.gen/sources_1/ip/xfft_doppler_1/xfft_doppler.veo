@@ -57,7 +57,7 @@
 xfft_doppler your_instance_name (
   .aclk(aclk),                                                // input wire aclk
   .aresetn(aresetn),                                          // input wire aresetn
-  .s_axis_config_tdata(s_axis_config_tdata),                  // input wire [15 : 0] s_axis_config_tdata
+  .s_axis_config_tdata(s_axis_config_tdata),                  // input wire [7 : 0] s_axis_config_tdata
   .s_axis_config_tvalid(s_axis_config_tvalid),                // input wire s_axis_config_tvalid
   .s_axis_config_tready(s_axis_config_tready),                // output wire s_axis_config_tready
   .s_axis_data_tdata(s_axis_data_tdata),                      // input wire [31 : 0] s_axis_data_tdata
@@ -65,9 +65,13 @@ xfft_doppler your_instance_name (
   .s_axis_data_tready(s_axis_data_tready),                    // output wire s_axis_data_tready
   .s_axis_data_tlast(s_axis_data_tlast),                      // input wire s_axis_data_tlast
   .m_axis_data_tdata(m_axis_data_tdata),                      // output wire [31 : 0] m_axis_data_tdata
+  .m_axis_data_tuser(m_axis_data_tuser),                      // output wire [7 : 0] m_axis_data_tuser
   .m_axis_data_tvalid(m_axis_data_tvalid),                    // output wire m_axis_data_tvalid
   .m_axis_data_tready(m_axis_data_tready),                    // input wire m_axis_data_tready
   .m_axis_data_tlast(m_axis_data_tlast),                      // output wire m_axis_data_tlast
+  .m_axis_status_tdata(m_axis_status_tdata),                  // output wire [7 : 0] m_axis_status_tdata
+  .m_axis_status_tvalid(m_axis_status_tvalid),                // output wire m_axis_status_tvalid
+  .m_axis_status_tready(m_axis_status_tready),                // input wire m_axis_status_tready
   .event_frame_started(event_frame_started),                  // output wire event_frame_started
   .event_tlast_unexpected(event_tlast_unexpected),            // output wire event_tlast_unexpected
   .event_tlast_missing(event_tlast_missing),                  // output wire event_tlast_missing

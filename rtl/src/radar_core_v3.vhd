@@ -15,12 +15,16 @@ entity radar_core_v3 is
         s_axis_tvalid   : in  STD_LOGIC;
         s_axis_tlast    : in  STD_LOGIC;
         s_axis_tready   : out STD_LOGIC;
+        
+        -- Output now represents CFAR detections (0 = Noise, >0 = Detection Magnitude)
         m_axis_tdata    : out STD_LOGIC_VECTOR(16 downto 0);
         m_axis_tvalid   : out STD_LOGIC;
         m_axis_tlast    : out STD_LOGIC;
         m_axis_tready   : in  STD_LOGIC;
+        
         rdm_range_bin   : out STD_LOGIC_VECTOR(9 downto 0);
         rdm_doppler_bin : out STD_LOGIC_VECTOR(6 downto 0);
+        
         status_range_fft_done   : out STD_LOGIC;
         status_doppler_fft_done : out STD_LOGIC;
         status_frame_complete   : out STD_LOGIC;
@@ -30,6 +34,7 @@ end radar_core_v3;
 
 architecture Behavioral of radar_core_v3 is
 
+    -- 1. Range Windowing
     component window_multiplier is
         Generic ( DATA_WIDTH : integer := 32; N_SAMPLES : integer := 1024; COEF_WIDTH : integer := 16 );
         Port (
@@ -44,11 +49,12 @@ architecture Behavioral of radar_core_v3 is
         );
     end component;
 
+    -- 2. Range FFT
     COMPONENT xfft_0
       PORT (
         aclk : IN STD_LOGIC;
         aresetn : IN STD_LOGIC;
-        s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        s_axis_config_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         s_axis_config_tvalid : IN STD_LOGIC;
         s_axis_config_tready : OUT STD_LOGIC;
         s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -56,9 +62,13 @@ architecture Behavioral of radar_core_v3 is
         s_axis_data_tready : OUT STD_LOGIC;
         s_axis_data_tlast : IN STD_LOGIC;
         m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         m_axis_data_tvalid : OUT STD_LOGIC;
         m_axis_data_tready : IN STD_LOGIC;
         m_axis_data_tlast : OUT STD_LOGIC;
+        m_axis_status_tdata : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        m_axis_status_tvalid : OUT STD_LOGIC;
+        m_axis_status_tready : IN STD_LOGIC;
         event_frame_started : OUT STD_LOGIC;
         event_tlast_unexpected : OUT STD_LOGIC;
         event_tlast_missing : OUT STD_LOGIC;
@@ -68,11 +78,12 @@ architecture Behavioral of radar_core_v3 is
       );
     END COMPONENT;
 
+    -- 3. Doppler FFT
     COMPONENT xfft_doppler
       PORT (
         aclk : IN STD_LOGIC;
         aresetn : IN STD_LOGIC;
-        s_axis_config_tdata : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        s_axis_config_tdata : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         s_axis_config_tvalid : IN STD_LOGIC;
         s_axis_config_tready : OUT STD_LOGIC;
         s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -80,9 +91,13 @@ architecture Behavioral of radar_core_v3 is
         s_axis_data_tready : OUT STD_LOGIC;
         s_axis_data_tlast : IN STD_LOGIC;
         m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        m_axis_data_tuser : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         m_axis_data_tvalid : OUT STD_LOGIC;
         m_axis_data_tready : IN STD_LOGIC;
         m_axis_data_tlast : OUT STD_LOGIC;
+        m_axis_status_tdata : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        m_axis_status_tvalid : OUT STD_LOGIC;
+        m_axis_status_tready : IN STD_LOGIC;
         event_frame_started : OUT STD_LOGIC;
         event_tlast_unexpected : OUT STD_LOGIC;
         event_tlast_missing : OUT STD_LOGIC;
@@ -92,6 +107,7 @@ architecture Behavioral of radar_core_v3 is
       );
     END COMPONENT;
 
+    -- 4. Corner Turner
     component corner_turner is
         Generic ( N_RANGE : integer := 1024; N_DOPPLER : integer := 128; DATA_WIDTH : integer := 32 );
         Port (
@@ -106,6 +122,7 @@ architecture Behavioral of radar_core_v3 is
         );
     end component;
     
+    -- 5. Magnitude Calculation
     component magnitude_calc is
         Generic ( DATA_WIDTH : integer := 16; OUT_WIDTH : integer := 17 );
         Port (
@@ -120,11 +137,30 @@ architecture Behavioral of radar_core_v3 is
         );
     end component;
 
-    -- 1024-pt range FFT, 16-bit config
-    constant RANGE_FFT_CONFIG : std_logic_vector(15 downto 0) := x"0001";
-    -- 128-pt doppler FFT, 16-bit config
-    constant DOPPLER_FFT_CONFIG : std_logic_vector(15 downto 0) := x"0001";
+    -- 6. New OS-CFAR Component
+    component os_cfar is
+        Generic (
+            DATA_WIDTH   : integer := 17;
+            REF_CELLS    : integer := 8;
+            GUARD_CELLS  : integer := 2;
+            RANK_IDX     : integer := 12;
+            SCALING_MULT : integer := 4;
+            SCALING_DIV  : integer := 1
+        );
+        Port (
+            aclk, aresetn : in STD_LOGIC;
+            s_axis_tdata  : in STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
+            s_axis_tvalid : in STD_LOGIC;
+            s_axis_tready : out STD_LOGIC;
+            s_axis_tlast  : in STD_LOGIC;
+            m_axis_tdata  : out STD_LOGIC_VECTOR(DATA_WIDTH-1 downto 0);
+            m_axis_tvalid : out STD_LOGIC;
+            m_axis_tready : in STD_LOGIC;
+            m_axis_tlast  : out STD_LOGIC
+        );
+    end component;
 
+    -- Signals for interconnect
     signal win1_to_rfft_data  : STD_LOGIC_VECTOR(31 downto 0);
     signal win1_to_rfft_valid : STD_LOGIC;
     signal win1_to_rfft_ready : STD_LOGIC;
@@ -154,7 +190,15 @@ architecture Behavioral of radar_core_v3 is
     signal dfft_to_mag_valid : STD_LOGIC;
     signal dfft_to_mag_ready : STD_LOGIC;
     signal dfft_to_mag_last  : STD_LOGIC;
-    
+
+    -- New signals for connecting Magnitude to CFAR
+    signal mag_to_cfar_data  : STD_LOGIC_VECTOR(16 downto 0);
+    signal mag_to_cfar_valid : STD_LOGIC;
+    signal mag_to_cfar_ready : STD_LOGIC;
+    signal mag_to_cfar_last  : STD_LOGIC;
+
+    -- FFT config signals
+    constant FFT_FWD_CONFIG : std_logic_vector(7 downto 0) := x"01";
     type cfg_state_t is (CFG_IDLE, CFG_SEND_RANGE, CFG_SEND_DOPPLER, CFG_DONE);
     signal cfg_state : cfg_state_t := CFG_IDLE;
     signal rfft_cfg_valid, dfft_cfg_valid : STD_LOGIC := '0';
@@ -164,7 +208,6 @@ architecture Behavioral of radar_core_v3 is
     signal ct_frame_complete, rfft_frame_started, dfft_frame_started : STD_LOGIC;
     signal range_idx : unsigned(9 downto 0) := (others => '0');
     signal doppler_idx : unsigned(6 downto 0) := (others => '0');
-    
     signal s_axis_tready_int : STD_LOGIC;
     signal win1_saturation, win2_saturation, ct_overflow : STD_LOGIC;
     signal overflow_sticky : STD_LOGIC := '0';
@@ -188,6 +231,7 @@ begin
         saturation_flag => win1_saturation
     );
 
+    -- Configuration state machine for Xilinx FFTs
     cfg_proc: process(aclk)
     begin
         if rising_edge(aclk) then
@@ -222,9 +266,8 @@ begin
 
     u_range_fft : xfft_0
     port map (
-        aclk => aclk,
-        aresetn => aresetn,
-        s_axis_config_tdata  => RANGE_FFT_CONFIG,
+        aclk => aclk, aresetn => aresetn,
+        s_axis_config_tdata  => FFT_FWD_CONFIG,
         s_axis_config_tvalid => rfft_cfg_valid,
         s_axis_config_tready => rfft_cfg_ready,
         s_axis_data_tdata    => win1_to_rfft_data,
@@ -232,9 +275,13 @@ begin
         s_axis_data_tready   => win1_to_rfft_ready,
         s_axis_data_tlast    => win1_to_rfft_last,
         m_axis_data_tdata    => rfft_raw_data,
+        m_axis_data_tuser    => open,
         m_axis_data_tvalid   => rfft_raw_valid,
         m_axis_data_tready   => rfft_raw_ready,
         m_axis_data_tlast    => rfft_raw_last,
+        m_axis_status_tdata  => open,
+        m_axis_status_tvalid => open,
+        m_axis_status_tready => '1',
         event_frame_started  => rfft_frame_started,
         event_tlast_unexpected      => open,
         event_tlast_missing         => open,
@@ -243,6 +290,7 @@ begin
         event_data_out_channel_halt => open
     );
 
+    -- Direct connect RFFT to CT
     rfft_to_ct_data  <= rfft_raw_data;
     rfft_to_ct_valid <= rfft_raw_valid;
     rfft_to_ct_last  <= rfft_raw_last;
@@ -281,9 +329,8 @@ begin
 
     u_doppler_fft : xfft_doppler
     port map (
-        aclk => aclk,
-        aresetn => aresetn,
-        s_axis_config_tdata  => DOPPLER_FFT_CONFIG,
+        aclk => aclk, aresetn => aresetn,
+        s_axis_config_tdata  => FFT_FWD_CONFIG,
         s_axis_config_tvalid => dfft_cfg_valid,
         s_axis_config_tready => dfft_cfg_ready,
         s_axis_data_tdata    => win2_to_dfft_data,
@@ -291,9 +338,13 @@ begin
         s_axis_data_tready   => win2_to_dfft_ready,
         s_axis_data_tlast    => win2_to_dfft_last,
         m_axis_data_tdata    => dfft_to_mag_data,
+        m_axis_data_tuser    => open,
         m_axis_data_tvalid   => dfft_to_mag_valid,
         m_axis_data_tready   => dfft_to_mag_ready,
         m_axis_data_tlast    => dfft_to_mag_last,
+        m_axis_status_tdata  => open,
+        m_axis_status_tvalid => open,
+        m_axis_status_tready => '1',
         event_frame_started  => dfft_frame_started,
         event_tlast_unexpected      => open,
         event_tlast_missing         => open,
@@ -310,18 +361,48 @@ begin
         s_axis_tvalid => dfft_to_mag_valid,
         s_axis_tready => dfft_to_mag_ready,
         s_axis_tlast  => dfft_to_mag_last,
+        
+        -- Connect to internal CFAR wires instead of output
+        m_axis_tdata  => mag_to_cfar_data,
+        m_axis_tvalid => mag_to_cfar_valid,
+        m_axis_tready => mag_to_cfar_ready,
+        m_axis_tlast  => mag_to_cfar_last
+    );
+
+    -- NEW: OS-CFAR Instance
+    u_os_cfar : os_cfar
+    generic map ( 
+        DATA_WIDTH   => 17,
+        REF_CELLS    => 8,
+        GUARD_CELLS  => 2,
+        RANK_IDX     => 12,
+        SCALING_MULT => 4,
+        SCALING_DIV  => 1
+    )
+    port map (
+        aclk          => aclk,
+        aresetn       => aresetn,
+        s_axis_tdata  => mag_to_cfar_data,
+        s_axis_tvalid => mag_to_cfar_valid,
+        s_axis_tready => mag_to_cfar_ready,
+        s_axis_tlast  => mag_to_cfar_last,
+        
+        -- Connect to final output ports
         m_axis_tdata  => m_axis_tdata,
         m_axis_tvalid => m_axis_tvalid,
         m_axis_tready => m_axis_tready,
         m_axis_tlast  => m_axis_tlast
     );
 
+    -- Index tracking logic (Range/Doppler bins)
+    -- This relies on m_axis_tvalid/ready, which now come from OS-CFAR
     index_proc: process(aclk)
     begin
         if rising_edge(aclk) then
             if aresetn = '0' then
                 range_idx   <= (others => '0');
                 doppler_idx <= (others => '0');
+            -- This logic works automatically with the CFAR pipeline delay
             elsif m_axis_tvalid = '1' and m_axis_tready = '1' then
                 if doppler_idx = N_DOPPLER - 1 then
                     doppler_idx <= (others => '0');
