@@ -1,0 +1,311 @@
+
+*** Running vivado
+    with args -log ADR_radar_core.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source ADR_radar_core.tcl
+
+
+
+****** Vivado v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Tue Feb  3 04:07:39 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source ADR_radar_core.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.srcs/utils_1/imports/synth_1/radar_core_v3.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.srcs/utils_1/imports/synth_1/radar_core_v3.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top ADR_radar_core -part xc7a35ticsg324-1L
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35ti'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35ti'
+INFO: [Device 21-403] Loading part xc7a35ticsg324-1L
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 13388
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1267.758 ; gain = 539.430
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'ADR_radar_core' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:59]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_SAMPLES bound to: 1024 - type: integer 
+	Parameter COEF_WIDTH bound to: 16 - type: integer 
+INFO: [Synth 8-3491] module 'window_multiplier' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:6' bound to instance 'u_range_window' of component 'window_multiplier' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:309]
+INFO: [Synth 8-638] synthesizing module 'window_multiplier' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:27]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_SAMPLES bound to: 1024 - type: integer 
+	Parameter COEF_WIDTH bound to: 16 - type: integer 
+WARNING: [Synth 8-5733] ignoring attributes on constant declaration HAMMING_ROM [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:49]
+INFO: [Synth 8-256] done synthesizing module 'window_multiplier' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:27]
+INFO: [Synth 8-3491] module 'xfft_0' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_0_stub.v:6' bound to instance 'u_range_fft' of component 'xfft_0' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:350]
+INFO: [Synth 8-6157] synthesizing module 'xfft_0' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'xfft_0' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_0_stub.v:6]
+	Parameter N_RANGE bound to: 1024 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+INFO: [Synth 8-3491] module 'corner_turner' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd:5' bound to instance 'u_corner_turner' of component 'corner_turner' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:367]
+INFO: [Synth 8-638] synthesizing module 'corner_turner' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd:27]
+	Parameter N_RANGE bound to: 1024 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'corner_turner' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd:27]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter NOTCH_MODE bound to: 2 - type: integer 
+INFO: [Synth 8-3491] module 'ADR_doppler_notch' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:10' bound to instance 'u_mti' of component 'ADR_doppler_notch' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:378]
+INFO: [Synth 8-638] synthesizing module 'ADR_doppler_notch' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:31]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter NOTCH_MODE bound to: 2 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'ADR_doppler_notch' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:31]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_SAMPLES bound to: 128 - type: integer 
+	Parameter COEF_WIDTH bound to: 16 - type: integer 
+INFO: [Synth 8-3491] module 'window_multiplier' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:6' bound to instance 'u_doppler_window' of component 'window_multiplier' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:389]
+INFO: [Synth 8-638] synthesizing module 'window_multiplier__parameterized1' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:27]
+	Parameter DATA_WIDTH bound to: 32 - type: integer 
+	Parameter N_SAMPLES bound to: 128 - type: integer 
+	Parameter COEF_WIDTH bound to: 16 - type: integer 
+WARNING: [Synth 8-5733] ignoring attributes on constant declaration HAMMING_ROM [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:49]
+INFO: [Synth 8-256] done synthesizing module 'window_multiplier__parameterized1' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd:27]
+INFO: [Synth 8-3491] module 'xfft_doppler' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_doppler_stub.v:6' bound to instance 'u_doppler_fft' of component 'xfft_doppler' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:400]
+INFO: [Synth 8-6157] synthesizing module 'xfft_doppler' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_doppler_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'xfft_doppler' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/.Xil/Vivado-22544-SchoolLaptop/realtime/xfft_doppler_stub.v:6]
+	Parameter DATA_WIDTH bound to: 16 - type: integer 
+	Parameter OUT_WIDTH bound to: 17 - type: integer 
+INFO: [Synth 8-3491] module 'magnitude_calc' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd:8' bound to instance 'u_magnitude' of component 'magnitude_calc' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:417]
+INFO: [Synth 8-638] synthesizing module 'magnitude_calc' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd:27]
+	Parameter DATA_WIDTH bound to: 16 - type: integer 
+	Parameter OUT_WIDTH bound to: 17 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'magnitude_calc' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd:27]
+	Parameter DATA_WIDTH bound to: 17 - type: integer 
+	Parameter REF_RANGE bound to: 4 - type: integer 
+	Parameter REF_DOPPLER bound to: 4 - type: integer 
+	Parameter GUARD_RANGE bound to: 2 - type: integer 
+	Parameter GUARD_DOPPLER bound to: 1 - type: integer 
+	Parameter RANK_PCT bound to: 75 - type: integer 
+	Parameter SCALE_MIN bound to: 2 - type: integer 
+	Parameter SCALE_MAX bound to: 6 - type: integer 
+	Parameter SCALE_NOM bound to: 4 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+INFO: [Synth 8-3491] module 'ADR_os_cfar_2d' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:9' bound to instance 'u_cfar' of component 'ADR_os_cfar_2d' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:427]
+INFO: [Synth 8-638] synthesizing module 'ADR_os_cfar_2d' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:39]
+	Parameter DATA_WIDTH bound to: 17 - type: integer 
+	Parameter REF_RANGE bound to: 4 - type: integer 
+	Parameter REF_DOPPLER bound to: 4 - type: integer 
+	Parameter GUARD_RANGE bound to: 2 - type: integer 
+	Parameter GUARD_DOPPLER bound to: 1 - type: integer 
+	Parameter RANK_PCT bound to: 75 - type: integer 
+	Parameter SCALE_MIN bound to: 2 - type: integer 
+	Parameter SCALE_MAX bound to: 6 - type: integer 
+	Parameter SCALE_NOM bound to: 4 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'ADR_os_cfar_2d' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:39]
+	Parameter MAX_TRACKS bound to: 32 - type: integer 
+	Parameter N_RANGE bound to: 1024 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter INIT_HITS bound to: 2 - type: integer 
+	Parameter COAST_MAX bound to: 5 - type: integer 
+	Parameter ASSOC_GATE_R bound to: 10 - type: integer 
+	Parameter ASSOC_GATE_D bound to: 5 - type: integer 
+	Parameter ALPHA_GAIN bound to: 128 - type: integer 
+	Parameter BETA_GAIN bound to: 64 - type: integer 
+INFO: [Synth 8-3491] module 'ADR_tws_tracker' declared at 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:14' bound to instance 'u_tws' of component 'ADR_tws_tracker' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:479]
+INFO: [Synth 8-638] synthesizing module 'ADR_tws_tracker' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:55]
+	Parameter MAX_TRACKS bound to: 32 - type: integer 
+	Parameter N_RANGE bound to: 1024 - type: integer 
+	Parameter N_DOPPLER bound to: 128 - type: integer 
+	Parameter INIT_HITS bound to: 2 - type: integer 
+	Parameter COAST_MAX bound to: 5 - type: integer 
+	Parameter ASSOC_GATE_R bound to: 10 - type: integer 
+	Parameter ASSOC_GATE_D bound to: 5 - type: integer 
+	Parameter ALPHA_GAIN bound to: 128 - type: integer 
+	Parameter BETA_GAIN bound to: 64 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'ADR_tws_tracker' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:55]
+INFO: [Synth 8-256] done synthesizing module 'ADR_radar_core' (0#1) [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd:59]
+WARNING: [Synth 8-6014] Unused sequential element delay2_i_reg was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:59]
+WARNING: [Synth 8-6014] Unused sequential element delay2_q_reg was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:60]
+WARNING: [Synth 8-6014] Unused sequential element sample_cnt_reg was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd:61]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-5863] Implementing Library version of Mod/Rem due to signed path. This typically leads to poor QOR. Check RTL to see if unsigned path for the operator is possible  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd:147]
+WARNING: [Synth 8-6014] Unused sequential element scan_number_reg was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:135]
+WARNING: [Synth 8-6014] Unused sequential element out_valid_reg was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:138]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[0][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[0][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[1][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[1][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[2][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[2][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[3][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[3][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[4][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[4][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[5][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[5][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[6][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[6][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[7][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[7][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[8][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[8][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[9][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[9][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[10][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[10][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[11][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[11][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[12][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[12][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[13][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[13][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[14][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[14][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[15][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[15][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[16][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[16][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[17][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[17][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[18][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[18][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[19][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[19][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[20][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[20][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[21][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[21][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[22][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[22][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[23][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[23][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[24][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[24][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[25][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[25][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[26][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[26][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[27][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[27][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[28][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[28][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[29][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[29][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[30][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[30][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[31][age] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element track_file_reg[31][last_mag] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:144]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[0][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[1][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[2][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[3][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[4][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[5][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[6][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[7][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[8][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[9][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[10][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[11][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[12][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[13][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[14][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[15][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[16][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[17][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[18][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[19][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[20][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[21][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[22][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[23][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[24][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[25][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[26][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[27][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[28][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[29][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+WARNING: [Synth 8-6014] Unused sequential element det_buffer_reg[30][magnitude] was removed.  [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd:157]
+INFO: [Common 17-14] Message 'Synth 8-6014' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Synth 8-7129] Port det_magnitude[16] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[15] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[14] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[13] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[12] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[11] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[10] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[9] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[8] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[7] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[6] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[5] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[4] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[3] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[2] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[1] in module ADR_tws_tracker is either unconnected or has no load
+WARNING: [Synth 8-7129] Port det_magnitude[0] in module ADR_tws_tracker is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2549.133 ; gain = 1820.805
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:30 ; elapsed = 00:00:33 . Memory (MB): peak = 2549.133 ; gain = 1820.805
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:30 ; elapsed = 00:00:33 . Memory (MB): peak = 2549.133 ; gain = 1820.805
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2549.133 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler/xfft_doppler_in_context.xdc] for cell 'u_doppler_fft'
+Finished Parsing XDC File [c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/xfft_doppler/xfft_doppler_in_context.xdc] for cell 'u_doppler_fft'
+Parsing XDC File [c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0_1/xfft_0/xfft_0_in_context.xdc] for cell 'u_range_fft'
+Finished Parsing XDC File [c:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0_1/xfft_0/xfft_0_in_context.xdc] for cell 'u_range_fft'
+Parsing XDC File [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.runs/synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 2794.453 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:57 ; elapsed = 00:00:59 . Memory (MB): peak = 2794.453 ; gain = 2066.125
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35ticsg324-1L
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:57 ; elapsed = 00:00:59 . Memory (MB): peak = 2794.453 ; gain = 2066.125
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:57 ; elapsed = 00:00:59 . Memory (MB): peak = 2794.453 ; gain = 2066.125
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Preparing Guide Design
+---------------------------------------------------------------------------------
+CRITICAL WARNING: [Synth 8-6895] The reference checkpoint C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.srcs/utils_1/imports/synth_1/radar_core_v3.dcp is not suitable for use with incremental synthesis for this design. Please regenerate the checkpoint for this design with -incremental_synth switch in the same Vivado session that synth_design has been run. Synthesis will continue with the default flow
+---------------------------------------------------------------------------------
+Finished Doing Graph Differ : Time (s): cpu = 00:01:00 ; elapsed = 00:01:03 . Memory (MB): peak = 2794.453 ; gain = 2066.125
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Preparing Guide Design : Time (s): cpu = 00:01:00 ; elapsed = 00:01:03 . Memory (MB): peak = 2794.453 ; gain = 2066.125
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-6040] Register sample_idx_reg_rep driving address of a ROM cannot be packed in BRAM/URAM because of presence of initial value.

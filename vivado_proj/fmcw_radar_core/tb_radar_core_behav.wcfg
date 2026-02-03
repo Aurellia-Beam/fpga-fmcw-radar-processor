@@ -3,97 +3,85 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="tb_radar_core_behav.wdb" id="1">
+      <db_ref path="ADR_tb_quick_behav.wdb" id="1">
          <top_modules>
-            <top_module name="tb_radar_core" />
+            <top_module name="ADR_tb_quick" />
             <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="709.277448 us"></ZoomEndTime>
-      <Cursor1Time time="1.000000 us"></Cursor1Time>
+      <ZoomStartTime time="56,584.356 ns"></ZoomStartTime>
+      <ZoomEndTime time="59,358.509 ns"></ZoomEndTime>
+      <Cursor1Time time="57,725.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="158"></NameColumnWidth>
-      <ValueColumnWidth column_width="143"></ValueColumnWidth>
+      <ValueColumnWidth column_width="139"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="19" />
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/wr_bank_sel" type="logic">
-      <obj_property name="ElementShortName">wr_bank_sel</obj_property>
-      <obj_property name="ObjectShortName">wr_bank_sel</obj_property>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/ADR_tb_quick/uut/cfar_out_last" type="logic">
+      <obj_property name="ElementShortName">cfar_out_last</obj_property>
+      <obj_property name="ObjectShortName">cfar_out_last</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/wr_chirp" type="array">
-      <obj_property name="ElementShortName">wr_chirp[6:0]</obj_property>
-      <obj_property name="ObjectShortName">wr_chirp[6:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/cfar_out_valid" type="logic">
+      <obj_property name="ElementShortName">cfar_out_valid</obj_property>
+      <obj_property name="ObjectShortName">cfar_out_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/wr_sample" type="array">
-      <obj_property name="ElementShortName">wr_sample[9:0]</obj_property>
-      <obj_property name="ObjectShortName">wr_sample[9:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/det_to_tws_last" type="logic">
+      <obj_property name="ElementShortName">det_to_tws_last</obj_property>
+      <obj_property name="ObjectShortName">det_to_tws_last</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/wr_addr" type="other">
-      <obj_property name="ElementShortName">wr_addr</obj_property>
-      <obj_property name="ObjectShortName">wr_addr</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/det_to_tws_valid" type="logic">
+      <obj_property name="ElementShortName">det_to_tws_valid</obj_property>
+      <obj_property name="ObjectShortName">det_to_tws_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/wr_frame_done" type="logic">
-      <obj_property name="ElementShortName">wr_frame_done</obj_property>
-      <obj_property name="ObjectShortName">wr_frame_done</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/det_to_tws_range" type="array">
+      <obj_property name="ElementShortName">det_to_tws_range[9:0]</obj_property>
+      <obj_property name="ObjectShortName">det_to_tws_range[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_bank_sel" type="logic">
-      <obj_property name="ElementShortName">rd_bank_sel</obj_property>
-      <obj_property name="ObjectShortName">rd_bank_sel</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/det_to_tws_dopp" type="array">
+      <obj_property name="ElementShortName">det_to_tws_dopp[6:0]</obj_property>
+      <obj_property name="ObjectShortName">det_to_tws_dopp[6:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_range" type="array">
-      <obj_property name="ElementShortName">rd_range[9:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_range[9:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_tws/det_last" type="logic">
+      <obj_property name="ElementShortName">det_last</obj_property>
+      <obj_property name="ObjectShortName">det_last</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_doppler" type="array">
-      <obj_property name="ElementShortName">rd_doppler[6:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_doppler[6:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_tws/det_valid" type="logic">
+      <obj_property name="ElementShortName">det_valid</obj_property>
+      <obj_property name="ObjectShortName">det_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_addr" type="other">
-      <obj_property name="ElementShortName">rd_addr</obj_property>
-      <obj_property name="ObjectShortName">rd_addr</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_tws/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_active" type="logic">
-      <obj_property name="ElementShortName">rd_active</obj_property>
-      <obj_property name="ObjectShortName">rd_active</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_tws/det_count" type="array">
+      <obj_property name="ElementShortName">det_count[5:0]</obj_property>
+      <obj_property name="ObjectShortName">det_count[5:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_data_p1" type="array">
-      <obj_property name="ElementShortName">rd_data_p1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_data_p1[31:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_tws/num_active" type="array">
+      <obj_property name="ElementShortName">num_active[5:0]</obj_property>
+      <obj_property name="ObjectShortName">num_active[5:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/u_corner_turner/rd_data_p2" type="array">
-      <obj_property name="ElementShortName">rd_data_p2[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_data_p2[31:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_cfar/s_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">s_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tlast</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/ct_to_win2_data" type="array">
-      <obj_property name="ElementShortName">ct_to_win2_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ct_to_win2_data[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/ct_to_win2_valid" type="logic">
-      <obj_property name="ElementShortName">ct_to_win2_valid</obj_property>
-      <obj_property name="ObjectShortName">ct_to_win2_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/ct_to_win2_last" type="logic">
-      <obj_property name="ElementShortName">ct_to_win2_last</obj_property>
-      <obj_property name="ObjectShortName">ct_to_win2_last</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/win2_to_dfft_valid" type="logic">
-      <obj_property name="ElementShortName">win2_to_dfft_valid</obj_property>
-      <obj_property name="ObjectShortName">win2_to_dfft_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/win2_to_dfft_last" type="logic">
-      <obj_property name="ElementShortName">win2_to_dfft_last</obj_property>
-      <obj_property name="ObjectShortName">win2_to_dfft_last</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/dfft_to_mag_valid" type="logic">
-      <obj_property name="ElementShortName">dfft_to_mag_valid</obj_property>
-      <obj_property name="ObjectShortName">dfft_to_mag_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_radar_core/uut/dfft_to_mag_data" type="array">
-      <obj_property name="ElementShortName">dfft_to_mag_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dfft_to_mag_data[31:0]</obj_property>
+   <wvobject fp_name="/ADR_tb_quick/uut/u_cfar/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
    </wvobject>
 </wave_config>

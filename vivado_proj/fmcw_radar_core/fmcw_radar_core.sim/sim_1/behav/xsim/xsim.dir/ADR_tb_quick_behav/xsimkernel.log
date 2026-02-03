@@ -1,0 +1,7 @@
+Running: xsim.dir/ADR_tb_quick_behav/xsimk.exe -simmode gui -wdb ADR_tb_quick_behav.wdb -simrunnum 0 -socket 61591
+Design successfully loaded
+Design Loading Memory Usage: 35132 KB (Peak: 35132 KB)
+Design Loading CPU Usage: 61 ms
+Simulation completed
+Simulation Memory Usage: 47476 KB (Peak: 47476 KB)
+Simulation CPU Usage: 84124 ms

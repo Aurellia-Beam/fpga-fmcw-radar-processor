@@ -2,13 +2,13 @@
 2020.2
 Nov 14 2025
 19:37:27
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd,1770112522,vhdl2008,,,,adr_doppler_notch,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd,1770113357,vhdl2008,,,,adr_os_cfar_2d,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd,1770115197,vhdl2008,,,,adr_radar_core,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tb_quick.vhd,1770113295,vhdl2008,,,,adr_tb_quick,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd,1770112522,vhdl2008,,,,adr_tws_tracker,,,,,,,,
 C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd,1770095652,vhdl2008,,,,corner_turner,,,,,,,,
 C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd,1770032334,vhdl2008,,,,magnitude_calc,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/os_cfar.vhd,1770098603,vhdl,,,,os_cfar,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core_v3.vhd,1770098563,vhdl2008,,,,radar_core_v3,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_full_suite.vhd,1770099243,vhdl,,,,tb_full_suite,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_os_cfar.vhd,1770098635,vhdl,,,,tb_os_cfar,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/tb_radar_core.vhd,1770084944,vhdl2008,,,,tb_radar_core,,,,,,,,
 C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd,1770032339,vhdl2008,,,,window_multiplier,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_0_1/sim/xfft_0.vhd,1770088971,vhdl,,,,xfft_0,,,,,,,,
-C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_doppler_1/sim/xfft_doppler.vhd,1770089076,vhdl,,,,xfft_doppler,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_128_1/sim/xfft_128.vhd,1770114463,vhdl,,,,xfft_128,,,,,,,,
+C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_32_1/sim/xfft_32.vhd,1770114481,vhdl,,,,xfft_32,,,,,,,,

@@ -1,0 +1,1 @@
+xfft_32.vhd,vhdl,xil_defaultlib,../../../../fmcw_radar_core.gen/sources_1/ip/xfft_32_1/sim/xfft_32.vhd,incdir="../../../../../../../../../../../AMDDesignTools/2025.2/Vivado/data/rsb/busdef"

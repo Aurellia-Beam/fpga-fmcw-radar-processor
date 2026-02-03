@@ -1,0 +1,5 @@
+vhdl xil_defaultlib  \
+"../../../../fmcw_radar_core.gen/sources_1/ip/xfft_128_1/sim/xfft_128.vhd" \
+
+# Do not sort compile order
+nosort
