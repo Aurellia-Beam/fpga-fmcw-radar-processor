@@ -32,6 +32,7 @@ architecture Behavioral of tb_doppler_notch is
     -- Accumulate output power for each test
     signal output_power_acc : real := 0.0;
     signal output_count     : integer := 0;
+    signal output_acc_reset : std_logic := '0';
 
     -- Use 2-pulse for primary tests, 3-pulse tested separately via different instance
     component doppler_notch is
@@ -114,7 +115,7 @@ begin
         -- Test 1: DC (zero-Doppler) — should be nearly nulled
         -- ==================================================================
         report "=== T1: DC rejection (2-pulse) ===";
-        test_phase <= 1; output_power_acc <= 0.0; output_count <= 0;
+        test_phase <= 1; output_acc_reset <= '1';
         bypass <= '0';
         send_chirp(0.0, "DC");
         wait for 200 ns;
@@ -127,7 +128,7 @@ begin
         -- Test 2: Half-Nyquist Doppler — should pass through
         -- ==================================================================
         report "=== T2: Doppler tone (f=8) passthrough ===";
-        test_phase <= 2; output_power_acc <= 0.0; output_count <= 0;
+        test_phase <= 2; output_acc_reset <= '1';
         send_chirp(8.0, "f=8");
         wait for 200 ns;
         write(L, string'("T2 avg power: "));
@@ -144,7 +145,7 @@ begin
         -- Test 3: Bypass — output = input
         -- ==================================================================
         report "=== T3: Bypass mode ===";
-        test_phase <= 3; output_power_acc <= 0.0; output_count <= 0;
+        test_phase <= 3; output_acc_reset <= '1';
         bypass <= '1';
         send_chirp(0.0, "DC-bypass");
         wait for 200 ns;
@@ -162,7 +163,7 @@ begin
         -- Test 4: 3-pulse DC rejection
         -- ==================================================================
         report "=== T4: 3-pulse DC rejection ===";
-        test_phase <= 4; output_power_acc <= 0.0; output_count <= 0;
+        test_phase <= 4; output_acc_reset <= '1';
         send_chirp(0.0, "DC-3p");
         wait for 200 ns;
 
@@ -188,7 +189,11 @@ begin
         variable i_out, q_out : real;
     begin
         if rising_edge(aclk) then
-            if m_axis_tvalid = '1' and m_axis_tready = '1' then
+            if output_acc_reset = '1' then
+                output_power_acc <= 0.0;
+                output_count <= 0;
+                output_acc_reset <= '0';
+            elsif m_axis_tvalid = '1' and m_axis_tready = '1' then
                 i_out := real(to_integer(signed(m_axis_tdata(HALF_W-1 downto 0))));
                 q_out := real(to_integer(signed(m_axis_tdata(DATA_W-1 downto HALF_W))));
                 output_power_acc <= output_power_acc + sqrt(i_out*i_out + q_out*q_out);
