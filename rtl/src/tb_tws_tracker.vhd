@@ -41,6 +41,7 @@ architecture Behavioral of tb_tws_tracker is
     signal fail_count   : integer := 0;
     signal scan_number  : integer := 0;
     signal trk_count    : integer := 0;
+    signal trk_count_reset : std_logic := '0';
 
 begin
 
@@ -111,7 +112,7 @@ begin
 
         for scan in 1 to NUM_SCANS loop
             scan_number <= scan;
-            trk_count   <= 0;
+            trk_count_reset <= '1';
             t1_r := 200 - (scan - 1) * 5;
             t2_r := 600;
             t3_r := 400 + (scan - 4) * 3;
@@ -192,7 +193,10 @@ begin
         variable L : line;
     begin
         if rising_edge(aclk) then
-            if trk_valid = '1' then
+            if trk_count_reset = '1' then
+                trk_count <= 0;
+                trk_count_reset <= '0';
+            elsif trk_valid = '1' then
                 trk_count <= trk_count + 1;
                 write(L, string'("  TRK id=")); write(L, to_integer(unsigned(trk_id)));
                 write(L, string'(" R=")); write(L, to_integer(signed(trk_range)));

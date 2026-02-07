@@ -95,7 +95,7 @@ begin
         -- ==================================================================
         -- Test 2: Write frame 2 — should read back transposed frame 1
         -- ==================================================================
-        report "=== T2: Second frame → transpose of frame 1 ===";
+        report "=== T2: Second frame -> transpose of frame 1 ===";
         test_phase <= 2;
         out_count <= 0;
         write_frame(2);
