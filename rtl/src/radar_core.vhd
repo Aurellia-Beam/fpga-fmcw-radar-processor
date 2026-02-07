@@ -238,6 +238,7 @@ architecture Behavioral of radar_core is
 
     signal cfar_out_data  : std_logic_vector(16 downto 0);
     signal cfar_out_valid, cfar_out_last : std_logic;
+    signal det_tvalid_int : std_logic;
 
     signal win1_saturation, win2_saturation : std_logic;
     signal ct_frame_done, ct_overflow : std_logic;
@@ -411,7 +412,8 @@ begin
 
     -- Detection output (filter: only pass non-zero)
     det_tdata       <= cfar_out_data;
-    det_tvalid      <= cfar_out_valid when unsigned(cfar_out_data) > 0 else '0';
+    det_tvalid_int  <= cfar_out_valid when unsigned(cfar_out_data) > 0 else '0';
+    det_tvalid      <= det_tvalid_int;
     det_range_bin   <= std_logic_vector(range_idx);
     det_doppler_bin <= std_logic_vector(doppler_idx);
 
@@ -427,7 +429,7 @@ begin
     )
     port map (
         aclk => aclk, aresetn => aresetn,
-        det_valid => det_tvalid, det_range => std_logic_vector(range_idx),
+        det_valid => det_tvalid_int, det_range => std_logic_vector(range_idx),
         det_doppler => std_logic_vector(doppler_idx), det_magnitude => cfar_out_data,
         det_last => cfar_out_last,
         trk_valid => trk_valid, trk_id => trk_id, trk_range => trk_range,
