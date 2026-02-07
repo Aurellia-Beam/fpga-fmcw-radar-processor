@@ -1,20 +1,7 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_32_1/sim/xfft_32.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'xfft_32'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/vivado_proj/fmcw_radar_core/fmcw_radar_core.gen/sources_1/ip/xfft_128_1/sim/xfft_128.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'xfft_128'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_doppler_notch.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ADR_doppler_notch'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_os_cfar_2d.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ADR_os_cfar_2d'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_radar_core.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ADR_radar_core'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tws_tracker.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ADR_tws_tracker'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/corner_turner.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'corner_turner'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/magnitude_calc.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'magnitude_calc'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/window_multiplier.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'window_multiplier'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/ADR_tb_quick.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ADR_tb_quick'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'radar_core'
+ERROR: [VRFC 10-8820] cannot read from 'out' object 'det_tvalid'; use 'buffer' or 'inout' instead [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd:430]
+ERROR: [VRFC 10-8350] formal port 'det_valid' of mode 'in' cannot be associated with actual port 'det_tvalid' of mode 'out' [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd:430]
+ERROR: [VRFC 10-3031] 'det_tvalid' with mode 'out' cannot be read [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd:430]
+ERROR: [VRFC 10-9458] unit 'behavioral' is ignored due to previous errors [C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd:59]
+INFO: [VRFC 10-8704] VHDL file 'C:/Users/Aurellia/Documents/GitHub/fpga-fmcw-radar-processor/rtl/src/radar_core.vhd' is ignored due to errors
