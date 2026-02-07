@@ -145,8 +145,8 @@ begin
             elsif pipe_advance = '1' then
                 i_round := s2_mult_i + to_signed(2**(COEF_WIDTH-2), HALF_W + COEF_WIDTH);
                 q_round := s2_mult_q + to_signed(2**(COEF_WIDTH-2), HALF_W + COEF_WIDTH);
-                i_shifted := i_round(HALF_W + COEF_WIDTH - 2 downto COEF_WIDTH - 1);
-                q_shifted := q_round(HALF_W + COEF_WIDTH - 2 downto COEF_WIDTH - 1);
+                i_shifted := i_round(HALF_W + COEF_WIDTH - 2 downto COEF_WIDTH - 2);
+                q_shifted := q_round(HALF_W + COEF_WIDTH - 2 downto COEF_WIDTH - 2);
 
                 sat_flag <= '0';
                 if    i_shifted > MAX_POS then s3_i_out <= MAX_POS; sat_flag <= '1';

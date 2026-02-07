@@ -34,6 +34,7 @@ architecture Behavioral of tb_os_cfar_2d is
 
     signal sim_done   : boolean := false;
     signal det_count  : integer := 0;
+    signal det_count_reset : std_logic := '0';
     signal out_count  : integer := 0;
     signal test_phase : integer := 0;
 
@@ -121,7 +122,7 @@ begin
         -- ==================================================================
         report "=== Test 1: Two targets, auto scaling ===";
         test_phase <= 1;
-        det_count  <= 0;
+        det_count_reset <= '1';
         scale_ovr  <= "000";
         rdm := make_map(NOISE, TGT_AMP, TGT1_R, TGT1_D, TGT2_R, TGT2_D);
         feed_map(rdm);
@@ -137,7 +138,7 @@ begin
         -- ==================================================================
         report "=== Test 2: Noise only ===";
         test_phase <= 2;
-        det_count  <= 0;
+        det_count_reset <= '1';
         rdm := make_map(NOISE, NOISE, TGT1_R, TGT1_D, TGT2_R, TGT2_D);
         -- Override targets back to noise
         for r in 0 to N_RANGE-1 loop
@@ -158,7 +159,7 @@ begin
         -- ==================================================================
         report "=== Test 3: Scale override = 2 ===";
         test_phase <= 3;
-        det_count  <= 0;
+        det_count_reset <= '1';
         scale_ovr  <= "010";
         rdm := make_map(NOISE, TGT_AMP/2, TGT1_R, TGT1_D, TGT2_R, TGT2_D);
         feed_map(rdm);
@@ -171,7 +172,7 @@ begin
         -- ==================================================================
         report "=== Test 4: Backpressure ===";
         test_phase <= 4;
-        det_count  <= 0;
+        det_count_reset <= '1';
         scale_ovr  <= "000";
         rdm := make_map(NOISE, TGT_AMP, TGT1_R, TGT1_D, TGT2_R, TGT2_D);
         feed_map(rdm);
@@ -182,7 +183,7 @@ begin
         -- ==================================================================
         report "=== Test 5: tvalid gaps ===";
         test_phase <= 5;
-        det_count  <= 0;
+        det_count_reset <= '1';
         rdm := make_map(NOISE, TGT_AMP, TGT1_R, TGT1_D, TGT2_R, TGT2_D);
         for r in 0 to N_RANGE-1 loop
             for d in 0 to N_DOPPLER-1 loop
@@ -227,7 +228,10 @@ begin
         variable L : line;
     begin
         if rising_edge(aclk) then
-            if m_axis_tvalid = '1' and m_axis_tready = '1' then
+            if det_count_reset = '1' then
+                det_count <= 0;
+                det_count_reset <= '0';
+            elsif m_axis_tvalid = '1' and m_axis_tready = '1' then
                 out_count <= out_count + 1;
                 if unsigned(m_axis_tdata) > 0 then
                     det_count <= det_count + 1;
